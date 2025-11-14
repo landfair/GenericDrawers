@@ -2476,11 +2476,11 @@ header {
 
     // localStorage wrapper
     function saveData() {
-      localStorage.setItem('drawersData', JSON.stringify(commentBanks));
+      localStorage.setItem('drawersGenericData', JSON.stringify(commentBanks));
     }
 
     function loadData() {
-      const saved = localStorage.getItem('drawersData');
+      const saved = localStorage.getItem('drawersGenericData');
       if (saved) {
         commentBanks = JSON.parse(saved);
       } else {
