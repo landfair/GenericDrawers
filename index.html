@@ -1,0 +1,3891 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Drawers - Resource Organization</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+  <style>
+:root {
+    /* Brand Colors - Crail as primary, Cloudy minimal */
+    --primary-color: #C15F3C;
+    --primary-dark: #A04F2D;
+    --primary-light: #D17A5C;
+    --primary-gradient: linear-gradient(135deg, #C15F3C 0%, #A04F2D 100%);
+
+    /* Text Colors */
+    --text-primary: #3d3d3d;
+    --text-secondary: #6b6b6b;
+    --text-tertiary: #B1ADA1;
+    --background-color: #FFFFFF;
+    --card-background: #FAFAF9;
+    --card-background-hover: #F4F3EE;
+    --header-background: #F4F3EE;
+    --modal-background: #FFFFFF;
+    --input-background: #FFFFFF;
+
+    /* Accent Colors - Crail highlights */
+    --accent-purple-light: #C15F3C;
+    --accent-purple-lighter: #D17A5C;
+    --accent-purple-lightest: #F5E5DC;
+
+    /* UI Elements - Cloudy used sparingly */
+    --border-color: #e8e6e1;
+    --border-color-strong: #B1ADA1;
+    --card-border: 1px solid rgba(232, 230, 225, 0.8);
+
+    /* Spacing Scale */
+    --space-xs: 4px;
+    --space-sm: 8px;
+    --space-md: 16px;
+    --space-lg: 24px;
+    --space-xl: 32px;
+    --space-2xl: 48px;
+
+    /* Border Radius */
+    --radius-sm: 6px;
+    --radius-md: 10px;
+    --radius-lg: 14px;
+    --radius-xl: 20px;
+    --radius-full: 9999px;
+
+    /* Shadows */
+    --shadow-sm: 0 2px 8px rgba(177, 173, 161, 0.15);
+    --shadow-md: 0 4px 16px rgba(177, 173, 161, 0.2);
+    --shadow-lg: 0 8px 24px rgba(177, 173, 161, 0.25);
+    --shadow-xl: 0 16px 48px rgba(177, 173, 161, 0.3);
+
+    /* Transitions */
+    --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-base: 250ms cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-slow: 350ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: var(--background-color);
+  color: var(--text-primary);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 16px 48px;
+  background-color: var(--header-background);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+@media (max-width: 768px) {
+  header {
+    padding: 12px 20px;
+  }
+}
+
+.header-title {
+  text-align: left;
+  position: absolute;
+  left: 48px;
+}
+
+@media (max-width: 768px) {
+  .header-title {
+    left: 20px;
+  }
+
+  .header-buttons {
+    right: 20px;
+  }
+}
+
+.header-title h1,
+.header-title h2 {
+  font-size: 1.75rem;
+  color: #000000;
+  margin: 0;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.2;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  cursor: pointer;
+  transition: opacity var(--transition-fast);
+}
+
+.header-title h1:hover,
+.header-title h2:hover {
+  opacity: 0.7;
+}
+
+@media (max-width: 768px) {
+  .header-title h1,
+  .header-title h2 {
+    font-size: 1.1rem;
+  }
+}
+
+.header-buttons {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  flex-shrink: 0;
+  position: absolute;
+  right: 48px;
+}
+
+.options-dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.toggle-btn {
+  background: transparent;
+  color: var(--primary-color);
+  border: none;
+  border-radius: var(--radius-sm);
+  padding: 8px 14px;
+  font-size: 1.4rem;
+  font-weight: 300;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  line-height: 1;
+}
+
+@media (max-width: 768px) {
+  .toggle-btn {
+    padding: 4px 8px;
+    font-size: 1.2rem;
+  }
+}
+
+.toggle-btn:hover {
+  background-color: var(--accent-purple-lightest);
+  transform: scale(1.1);
+}
+
+.options-dropdown-menu {
+  display: none;
+  position: absolute;
+  right: 0;
+  top: calc(100% + 8px);
+  background-color: var(--card-background);
+  min-width: 220px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  border-radius: var(--radius-md);
+  z-index: 1000;
+  border: 1px solid var(--border-color);
+  overflow: hidden;
+}
+
+@media (max-width: 768px) {
+  .options-dropdown-menu {
+    min-width: 200px;
+    top: calc(100% + 5px);
+  }
+}
+
+.options-dropdown-menu.show {
+  display: block;
+  animation: dropdownFadeIn 0.2s ease-out;
+}
+
+@keyframes dropdownFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.dropdown-item {
+  display: block;
+  width: 100%;
+  padding: 14px 24px;
+  text-align: left;
+  background: none;
+  border: none;
+  border-bottom: 1px solid var(--border-color);
+  color: var(--text-primary);
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all var(--transition-base);
+}
+
+@media (max-width: 768px) {
+  .dropdown-item {
+    padding: 12px 20px;
+    font-size: 0.95rem;
+  }
+}
+
+.dropdown-item:last-child {
+  border-bottom: none;
+}
+
+.dropdown-item:hover {
+  background-color: var(--accent-purple-lightest);
+  color: var(--primary-color);
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 48px 120px 80px;
+  width: 100%;
+  flex: 1;
+}
+
+@media (max-width: 1200px) {
+  .container {
+    max-width: 100%;
+    padding: 40px 60px 60px;
+  }
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: var(--space-md) var(--space-sm) 60px;
+  }
+}
+
+.overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 999;
+  backdrop-filter: blur(4px);
+}
+
+.popup {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.12);
+  z-index: 1000;
+  width: 90%;
+  max-width: 600px;
+  max-height: 85vh;
+  display: none;
+  flex-direction: column;
+  animation: modalFadeIn 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  overflow: hidden;
+}
+
+@media (max-width: 768px) {
+  .popup {
+    max-width: 450px;
+  }
+}
+
+@keyframes modalFadeIn {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -48%) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+.popup[style*="display: block"] {
+  display: flex;
+}
+
+.popup-header {
+  padding: 20px 24px 16px;
+  border-bottom: 1px solid #f0f0f0;
+  flex-shrink: 0;
+}
+
+.popup-header h2 {
+  margin: 0;
+  font-size: 1.2rem;
+  color: #0a0a0a;
+  text-align: left;
+  font-weight: 600;
+}
+
+.popup-body {
+  padding: 16px 24px 12px;
+  overflow-y: auto;
+  flex: 1 1 auto;
+  min-height: 0;
+  max-height: calc(85vh - 180px);
+}
+
+.popup-body label {
+  display: block;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: #2a2a2a;
+  margin-bottom: 6px;
+  text-align: left;
+}
+
+.popup input[type="text"],
+.popup input[type="url"] {
+  font-size: 0.9375rem;
+  padding: 13px 16px;
+  width: 100%;
+  border: 1px solid #d8d8d8;
+  border-radius: 10px;
+  background-color: #fafafa;
+  transition: all 0.2s;
+  box-sizing: border-box;
+  margin-bottom: 12px;
+}
+
+.popup input:focus {
+  outline: none;
+  background-color: #ffffff;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(107, 45, 143, 0.08);
+}
+
+.popup textarea {
+  width: 100%;
+  min-height: 70px;
+  resize: vertical;
+  padding: 10px 14px;
+  font-size: 0.9rem;
+  font-family: 'Inter', sans-serif;
+  border: 1px solid #d8d8d8;
+  border-radius: 10px;
+  background-color: #fafafa;
+  margin-bottom: 12px;
+}
+
+.popup textarea:focus {
+  outline: none;
+  background-color: #ffffff;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(107, 45, 143, 0.08);
+}
+
+.popup-buttons {
+  padding: 14px 24px 20px;
+  border-top: 1px solid #f0f0f0;
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+  flex-shrink: 0;
+}
+
+.popup-buttons button {
+  font-size: 0.875rem;
+  padding: 11px 20px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+
+.share-options {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.share-option-btn {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px;
+  background: var(--background-color);
+  border: 2px solid var(--border-color);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  text-align: left;
+  width: 100%;
+}
+
+.share-option-btn:hover {
+  border-color: var(--primary-color);
+  background: var(--accent-purple-lightest);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.share-icon {
+  font-size: 1.5rem;
+  flex-shrink: 0;
+}
+
+.share-option-content {
+  flex: 1;
+}
+
+.share-option-title {
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 4px;
+}
+
+.share-option-desc {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+}
+
+.share-option-tag {
+  background: #2ecc71;
+  color: white;
+  font-size: 0.7rem;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: var(--radius-sm);
+  flex-shrink: 0;
+  text-transform: lowercase;
+}
+
+.json-input {
+  width: 100%;
+  min-height: 120px;
+  padding: 12px;
+  border: 2px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  font-family: monospace;
+  font-size: 0.75rem;
+  resize: vertical;
+}
+
+.drop-zone {
+  border: 2px dashed var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 32px 24px;
+  text-align: center;
+  background: var(--background-color);
+  transition: all var(--transition-fast);
+  cursor: pointer;
+}
+
+.drop-zone:hover {
+  border-color: var(--primary-color);
+  background: var(--accent-purple-lightest);
+}
+
+.drop-zone.drag-over {
+  border-color: var(--primary-color);
+  background: var(--accent-purple-lightest);
+  transform: scale(1.02);
+}
+
+.drop-zone-content {
+  pointer-events: none;
+}
+
+.drop-zone-icon {
+  font-size: 2.5rem;
+  display: block;
+  margin-bottom: 12px;
+}
+
+.drop-zone-text {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0 0 4px 0;
+}
+
+.drop-zone-subtext {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  margin: 8px 0;
+}
+
+.drop-zone-button {
+  display: inline-block;
+  padding: 8px 20px;
+  background: var(--primary-color);
+  color: white;
+  border-radius: var(--radius-sm);
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  pointer-events: auto;
+  transition: all var(--transition-fast);
+}
+
+.drop-zone-button:hover {
+  background: var(--primary-dark);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
+}
+
+.popup-buttons button:first-child {
+  background: var(--primary-color);
+  color: white;
+  box-shadow: 0 1px 3px rgba(107, 45, 143, 0.12);
+}
+
+.popup-buttons button:first-child:hover {
+  background: var(--primary-dark);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(107, 45, 143, 0.2);
+}
+
+.popup-buttons button:last-child {
+  background: #f5f5f5;
+  color: #3a3a3a;
+  border: 1px solid #e5e5e5;
+}
+
+.popup-buttons button:last-child:hover {
+  background-color: #ebebeb;
+}
+
+#landing-container {
+  margin: 0 auto;
+  padding: 0;
+  max-width: 900px;
+  width: 100%;
+}
+
+@media (max-width: 768px) {
+  #landing-container {
+    padding: 0;
+  }
+}
+
+.drawer-search-container {
+  display: flex;
+  justify-content: center;
+  padding: 0;
+  margin-bottom: 24px;
+}
+
+#comment-container .drawer-search-container {
+  max-width: 900px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.search-input-wrapper {
+  position: relative;
+  width: 100%;
+  max-width: 100%;
+}
+
+@media (max-width: 768px) {
+  .drawer-search-container {
+    padding: 0;
+    margin-bottom: var(--space-md);
+  }
+}
+
+.drawer-search-input {
+  width: 100%;
+  padding: 14px 40px 14px 20px;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  font-size: 1rem;
+  background: var(--input-background);
+  transition: all var(--transition-fast);
+  box-sizing: border-box;
+}
+
+@media (max-width: 768px) {
+  .drawer-search-input {
+    padding: 8px 36px 8px 12px;
+    font-size: 0.9rem;
+  }
+}
+
+.drawer-search-input:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 2px rgba(107, 45, 143, 0.1);
+}
+
+.search-clear-btn {
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: transparent;
+  border: none;
+  color: var(--text-tertiary);
+  font-size: 1.5rem;
+  cursor: pointer;
+  border-radius: 50%;
+  transition: all var(--transition-fast);
+}
+
+.search-clear-btn:hover {
+  background: var(--border-color);
+  color: var(--text-primary);
+}
+
+.comment-banks {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 0;
+  padding: 0;
+}
+
+@media (max-width: 768px) {
+  .comment-banks {
+    gap: 8px;
+    padding: 0;
+  }
+}
+
+.add-comment-bank {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#comment-container .add-comment-bank {
+  margin-bottom: 24px;
+  max-width: 900px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.add-comment-bank .add-button {
+  font-size: 0.95rem;
+  padding: 12px 24px;
+  background: var(--primary-color);
+  color: white;
+  border: none;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  font-weight: 600;
+  box-shadow: var(--shadow-sm);
+  transition: all var(--transition-base);
+  width: auto;
+  display: block;
+  margin: 0 auto;
+}
+
+@media (max-width: 768px) {
+  .add-comment-bank .add-button {
+    font-size: 0.9rem;
+    padding: 10px 20px;
+  }
+}
+
+.add-comment-bank .add-button:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
+  background: var(--primary-dark);
+}
+
+.archive-link-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 0;
+}
+
+.archive-link-button {
+  font-size: 0.95rem;
+  padding: 12px 24px;
+  background: var(--primary-color);
+  color: white;
+  border: none;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  font-weight: 600;
+  box-shadow: var(--shadow-sm);
+  transition: all var(--transition-base);
+  width: auto;
+}
+
+@media (max-width: 768px) {
+  .archive-link-button {
+    font-size: 0.9rem;
+    padding: 10px 20px;
+  }
+}
+
+.archive-link-button:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
+  background: var(--primary-dark);
+}
+
+.comment-bank-link {
+  display: flex;
+  flex-direction: column;
+  padding: 28px 32px;
+  background-color: var(--card-background);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  cursor: pointer;
+  transition: all var(--transition-base);
+  border: var(--card-border);
+  position: relative;
+}
+
+@media (max-width: 768px) {
+  .comment-bank-link {
+    padding: 18px 20px;
+  }
+}
+
+.comment-bank-link:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
+  background-color: var(--card-background-hover);
+}
+
+.comment-bank-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.comment-bank-name-container {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
+  min-width: 0;
+}
+
+.comment-bank-name {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+@media (max-width: 768px) {
+  .comment-bank-name {
+    font-size: 0.95rem;
+  }
+}
+
+.drawer-card-count {
+  font-size: 0.85rem;
+  color: var(--text-tertiary);
+  padding: 4px 10px;
+  background: var(--background-color);
+  border-radius: var(--radius-sm);
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+@media (max-width: 768px) {
+  .drawer-card-count {
+    font-size: 0.75rem;
+    padding: 3px 8px;
+  }
+}
+
+.comment-bank-actions {
+  display: flex;
+  gap: 4px;
+  opacity: 0;
+  transition: opacity var(--transition-fast);
+}
+
+.comment-bank-link:hover .comment-bank-actions {
+  opacity: 1;
+}
+
+.bank-action-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-secondary);
+  padding: 4px 8px;
+  cursor: pointer;
+  font-size: 0.75rem;
+  transition: all var(--transition-fast);
+  font-weight: 500;
+}
+
+.bank-action-btn:hover {
+  color: var(--primary-color);
+}
+
+.bank-archive-btn:hover {
+  color: #e67e22;
+}
+
+.no-comment-banks {
+  text-align: center;
+  font-style: italic;
+  color: var(--text-tertiary);
+  margin-top: 40px;
+}
+
+.comment-container {
+  display: none;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 48px 120px 80px;
+  width: 100%;
+  flex: 1;
+  background-color: var(--background-color);
+}
+
+@media (max-width: 1200px) {
+  .comment-container {
+    max-width: 100%;
+    padding: 40px 60px 60px;
+  }
+}
+
+@media (max-width: 768px) {
+  .comment-container {
+    padding: var(--space-lg) var(--space-md);
+  }
+}
+
+.drawer-page-header {
+  background: var(--header-background);
+  padding: 40px 120px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.drawer-back-btn {
+  background: transparent;
+  border: 1px solid var(--border-color);
+  color: var(--primary-color);
+  padding: 10px 20px;
+  border-radius: var(--radius-sm);
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  margin-bottom: 20px;
+  display: inline-block;
+}
+
+.drawer-back-btn:hover {
+  background: var(--accent-purple-lightest);
+  border-color: var(--primary-color);
+  transform: translateX(-2px);
+}
+
+.drawer-page-title {
+  font-size: 2.25rem;
+  font-weight: 700;
+  background: var(--primary-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin: 0;
+  letter-spacing: -0.03em;
+}
+
+@media (max-width: 1200px) {
+  .drawer-page-header {
+    padding: 32px 60px;
+  }
+}
+
+@media (max-width: 768px) {
+  .drawer-page-header {
+    padding: 20px 16px;
+  }
+
+  .drawer-page-title {
+    font-size: 1.5rem;
+  }
+
+  .drawer-back-btn {
+    font-size: 0.85rem;
+    padding: 8px 16px;
+    margin-bottom: 12px;
+  }
+}
+
+.comment-header-wrapper {
+  position: sticky;
+  top: 80px;
+  z-index: 90;
+  background: var(--header-background);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+@media (max-width: 768px) {
+  .comment-header-wrapper {
+    top: 48px;
+  }
+}
+
+.comment-actions {
+  display: flex;
+  align-items: center;
+  padding: 16px 120px;
+  background: var(--header-background);
+  border-bottom: 1px solid var(--border-color);
+  gap: 12px;
+}
+
+@media (max-width: 1200px) {
+  .comment-actions {
+    padding: 16px 60px;
+  }
+}
+
+@media (max-width: 768px) {
+  .comment-actions {
+    padding: 12px 16px;
+    gap: 6px;
+  }
+}
+
+.comment-search-wrapper {
+  position: relative;
+  flex: 1;
+  min-width: 80px;
+}
+
+.comment-search-input {
+  width: 100%;
+  padding: 14px 40px 14px 20px;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  font-size: 1rem;
+  background: var(--input-background);
+  transition: all var(--transition-fast);
+  box-sizing: border-box;
+}
+
+@media (max-width: 768px) {
+  .comment-search-input {
+    padding: 8px 36px 8px 12px;
+    font-size: 0.9rem;
+  }
+}
+
+.comment-search-input:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 2px rgba(107, 45, 143, 0.1);
+}
+
+.comment-actions button {
+  background: var(--accent-purple-lightest);
+  color: var(--primary-color);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  padding: 10px 16px;
+  font-size: 1.3rem;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  width: 50px;
+  min-width: 50px;
+}
+
+@media (max-width: 768px) {
+  .comment-actions button {
+    padding: 8px 12px;
+    font-size: 1.2rem;
+    width: 44px;
+    min-width: 44px;
+  }
+}
+
+.comment-actions #addCommentBtn {
+  background: var(--primary-gradient);
+  color: white;
+  font-weight: 700;
+  font-size: 1.4rem;
+}
+
+.comment-actions button:hover {
+  transform: translateY(-1px);
+}
+
+.tag-filter-bar {
+  padding: 0;
+  background: var(--header-background);
+  border-bottom: 2px solid var(--border-color);
+}
+
+.tag-filter-bar.collapsed .tag-filter-header .filter-count,
+.tag-filter-bar.collapsed .tag-filter-header .btn-compact,
+.tag-filter-bar.collapsed .tag-filter-header .clear-filters-btn {
+  display: none;
+}
+
+.tag-filter-bar.collapsed .tag-filters {
+  display: none;
+}
+
+.tag-filter-bar.collapsed .tag-filter-header {
+  padding: 8px 20px;
+  justify-content: flex-start;
+  background: transparent;
+  border-bottom: none;
+}
+
+#comment-container .tag-filter-bar {
+  margin-bottom: 32px;
+  max-width: 900px;
+  margin-left: auto;
+  margin-right: auto;
+  border: none;
+  background: transparent;
+}
+
+#comment-container .tag-filter-bar.collapsed {
+  margin-bottom: 0;
+  border: none;
+  background: transparent;
+}
+
+.tag-filter-header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: 12px 120px;
+  background: var(--accent-purple-lightest);
+  border-bottom: 1px solid var(--border-color);
+  transition: padding var(--transition-base), background var(--transition-base), border-bottom var(--transition-base);
+}
+
+#comment-container .tag-filter-header {
+  padding: 12px 20px;
+}
+
+#comment-container .tag-filter-bar.collapsed .tag-filter-header {
+  padding: 8px 0;
+}
+
+#comment-container .tag-filters {
+  padding: 16px 20px;
+}
+
+@media (max-width: 1200px) {
+  .tag-filter-header {
+    padding: 12px 60px;
+  }
+}
+
+@media (max-width: 768px) {
+  .tag-filter-header {
+    padding: 8px var(--space-sm);
+  }
+}
+
+.toggle-filters-btn {
+  background: transparent;
+  border: none;
+  font-size: 1rem;
+  padding: 2px 6px;
+  cursor: pointer;
+  color: var(--primary-color);
+  transition: transform var(--transition-fast), background var(--transition-fast);
+}
+
+.toggle-filters-btn:hover {
+  background: var(--accent-purple-lighter);
+  border-radius: var(--radius-sm);
+}
+
+.tag-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 16px 120px;
+  max-height: 200px;
+  overflow-y: auto;
+  transition: max-height var(--transition-base), padding var(--transition-base);
+}
+
+@media (max-width: 1200px) {
+  .tag-filters {
+    padding: 16px 60px;
+  }
+}
+
+@media (max-width: 768px) {
+  .tag-filters {
+    gap: 6px;
+    padding: 12px 16px;
+  }
+}
+
+.tag-filters.hidden {
+  max-height: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+.tag-filter {
+  cursor: pointer;
+  padding: 6px 14px;
+  border-radius: var(--radius-full);
+  font-size: 0.85rem;
+  font-weight: 600;
+  border: 2px solid;
+  transition: all var(--transition-fast);
+  opacity: 0.7;
+}
+
+@media (max-width: 768px) {
+  .tag-filter {
+    padding: 3px 8px;
+    font-size: 0.65rem;
+  }
+}
+
+.tag-filter:hover {
+  opacity: 1;
+  transform: translateY(-1px);
+}
+
+.tag-filter.active {
+  opacity: 1;
+  box-shadow: var(--shadow-sm);
+  transform: scale(1.03);
+}
+
+.tag-filter.active::after {
+  content: '✓';
+  margin-left: 4px;
+}
+
+.filter-count {
+  font-size: 0.7rem;
+  color: var(--text-secondary);
+  flex: 1;
+}
+
+.tag-filter-header .btn-compact {
+  padding: 4px 10px;
+  background: var(--primary-color);
+  color: white;
+  border: none;
+  border-radius: var(--radius-sm);
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.tag-filter-header .btn-compact:hover {
+  background: var(--primary-dark);
+  transform: translateY(-1px);
+}
+
+.clear-filters-btn {
+  padding: 4px 10px;
+  background: var(--text-tertiary);
+  color: white;
+  border: none;
+  border-radius: var(--radius-full);
+  font-size: 0.7rem;
+  font-weight: 600;
+  cursor: pointer;
+  margin-left: auto;
+}
+
+.clear-filters-btn:hover {
+  background: var(--text-secondary);
+}
+
+.comments-list-wrapper {
+  max-width: 900px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+#comments-list {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+@media (max-width: 1200px) {
+  .comments-list-wrapper {
+    padding: 40px 60px 60px;
+  }
+
+  #comments-list {
+    gap: 24px;
+  }
+}
+
+@media (max-width: 768px) {
+  .comments-list-wrapper {
+    padding: 24px 16px 40px;
+  }
+
+  #comments-list {
+    gap: 16px;
+  }
+}
+
+.comment {
+  position: relative;
+  border: var(--card-border);
+  padding: 0;
+  border-radius: var(--radius-md);
+  background-color: var(--card-background);
+  transition: all var(--transition-base);
+  box-shadow: 0 2px 8px rgba(107, 45, 143, 0.06);
+  height: fit-content;
+}
+
+.comment:hover {
+  box-shadow: 0 6px 20px rgba(107, 45, 143, 0.12);
+  transform: translateY(-2px);
+}
+
+.comment::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  background: var(--primary-color);
+  transition: width var(--transition-base);
+}
+
+.comment:hover::before {
+  width: 6px;
+}
+
+.comment-header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 8px;
+  background: var(--accent-purple-lightest);
+  border-bottom: 1px solid var(--border-color);
+  border-radius: var(--radius-md) var(--radius-md) 0 0;
+}
+
+.tags-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 3px;
+  align-items: center;
+  flex: 1;
+}
+
+.tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 8px;
+  border-radius: var(--radius-full);
+  font-size: 0.65rem;
+  font-weight: 600;
+  border: 2px solid;
+}
+
+.comment-body {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+@media (max-width: 768px) {
+  .comment-body {
+    padding: 14px;
+    gap: 8px;
+  }
+}
+
+.card-title-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.card-title-display {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  flex: 1;
+}
+
+.card-title-link {
+  color: var(--primary-color);
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+
+.card-title-link:hover {
+  color: #8e44ad;
+  text-decoration: underline;
+}
+
+.copy-link-btn {
+  background: transparent;
+  border: 1px solid transparent;
+  color: var(--text-tertiary);
+  font-size: 0.85rem;
+  padding: 2px 6px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.copy-link-btn:hover {
+  background: var(--accent-purple-lightest);
+  border-color: var(--primary-color);
+  color: var(--primary-color);
+}
+
+.card-description-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.card-description-display {
+  font-size: 0.85rem;
+  line-height: 1.5;
+  color: var(--text-secondary);
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+.card-description-display.collapsed {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.description-toggle {
+  align-self: flex-start;
+  background: transparent;
+  border: 1px solid var(--border-color);
+  color: var(--primary-color);
+  font-size: 0.75rem;
+  padding: 2px 8px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.description-toggle:hover {
+  background: var(--accent-purple-lightest);
+}
+
+.comment-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 4px 8px;
+  background: rgba(107, 45, 143, 0.02);
+  border-top: 1px solid var(--border-color);
+  border-radius: 0 0 var(--radius-md) var(--radius-md);
+}
+
+.comment-actions-inline {
+  display: flex;
+  gap: 3px;
+}
+
+.comment-actions-inline button {
+  padding: 3px 8px;
+  font-size: 0.7rem;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  border: 1px solid transparent;
+  color: var(--text-secondary);
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.comment-actions-inline button:hover {
+  background: var(--card-background);
+  border-color: var(--border-color);
+  color: var(--primary-color);
+}
+
+.btn-icon-compact {
+  background: transparent;
+  color: var(--text-secondary);
+  padding: 8px 12px;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.btn-icon-compact:hover {
+  background: var(--accent-purple-lightest);
+  color: var(--primary-color);
+}
+
+.tag-manager {
+  max-width: 500px;
+}
+
+.tag-list {
+  margin: 0 0 16px;
+  max-height: 180px;
+  overflow-y: auto;
+  border: 1px solid #d8d8d8;
+  border-radius: 10px;
+  background: #fafafa;
+}
+
+.tag-list-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 12px;
+  border-bottom: 1px solid #e8e8e8;
+  background: white;
+}
+
+.tag-list-item:last-child {
+  border-bottom: none;
+}
+
+.tag-list-actions {
+  display: flex;
+  gap: 6px;
+}
+
+.tag-list-actions button {
+  padding: 6px 12px;
+  font-size: 0.8rem;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.tag-form {
+  padding: 16px;
+  border: 1px solid #d8d8d8;
+  border-radius: 10px;
+  background: #fafafa;
+}
+
+.tag-form-row {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.tag-form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  flex: 1;
+}
+
+.tag-color-group {
+  max-width: 90px;
+  flex: 0;
+}
+
+.tag-form-group input[type="text"] {
+  padding: 11px 14px;
+  border: 1px solid #d8d8d8;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  background: white;
+}
+
+.tag-form-group input[type="color"] {
+  height: 42px;
+  cursor: pointer;
+  border: 1px solid #d8d8d8;
+  border-radius: 8px;
+  padding: 4px;
+  background: white;
+}
+
+.btn-primary {
+  width: 100%;
+  padding: 10px;
+  background: var(--primary-gradient);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 600;
+  box-shadow: var(--shadow-sm);
+}
+
+.btn-primary:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
+}
+
+.modal-tags-section {
+  margin-top: 8px;
+}
+
+.modal-tags-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 10px;
+  border: 1px solid #d8d8d8;
+  border-radius: 10px;
+  background: #fafafa;
+  min-height: 44px;
+  max-height: 100px;
+  overflow-y: auto;
+}
+
+.modal-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 6px 12px;
+  border-radius: 7px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  border: 2px solid;
+  cursor: pointer;
+  transition: all 0.2s;
+  opacity: 0.5;
+}
+
+.modal-tag:hover {
+  opacity: 0.75;
+  transform: translateY(-1px);
+}
+
+.modal-tag.selected {
+  opacity: 1;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  transform: scale(1.02);
+  font-weight: 600;
+}
+
+.modal-tag.selected::before {
+  content: '✓';
+  font-weight: 700;
+}
+
+.no-tags-message {
+  font-size: 0.8125rem;
+  color: #a0a0a0;
+  font-weight: 500;
+}
+
+.about-modal {
+  max-width: 600px;
+  max-height: 90vh;
+}
+
+.konami-modal {
+  max-width: 900px;
+  max-height: 90vh;
+}
+
+.konami-modal .popup-body {
+  padding: 0;
+}
+
+.wikipedia-container {
+  width: 100%;
+  height: 600px;
+  overflow: hidden;
+}
+
+.wikipedia-container iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
+.about-section {
+  margin-bottom: 32px;
+}
+
+.about-heading {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--primary-color);
+  margin: 0 0 12px 0;
+}
+
+.about-text {
+  color: var(--text-primary);
+  line-height: 1.6;
+  margin: 0 0 12px 0;
+  font-size: 0.9rem;
+}
+
+.about-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.about-list li {
+  padding: 10px 0 10px 24px;
+  color: var(--text-primary);
+  line-height: 1.6;
+  font-size: 0.875rem;
+  position: relative;
+  border-left: 3px solid var(--accent-purple-lightest);
+  margin-bottom: 8px;
+  background: var(--background-color);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  padding-right: 12px;
+}
+
+.about-list li:before {
+  content: "→";
+  position: absolute;
+  left: 8px;
+  color: var(--primary-color);
+  font-weight: bold;
+}
+
+.about-list li strong {
+  color: var(--primary-color);
+  font-weight: 600;
+}
+
+.feature-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 16px;
+  margin-top: 20px;
+}
+
+.feature-item {
+  display: flex;
+  gap: 12px;
+  padding: 16px;
+  background: var(--background-color);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  transition: all 0.2s;
+}
+
+.feature-item:hover {
+  background: var(--accent-purple-lightest);
+  border-color: var(--primary-color);
+  transform: translateY(-2px);
+}
+
+.feature-icon {
+  font-size: 2rem;
+  line-height: 1;
+}
+
+.feature-content {
+  flex: 1;
+}
+
+.feature-title {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0 0 6px 0;
+}
+
+.feature-desc {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+  margin: 0;
+}
+
+.about-footer {
+  text-align: center;
+  padding-top: 24px;
+  border-top: 2px solid var(--border-color);
+}
+
+.about-version {
+  font-size: 0.85rem;
+  color: var(--text-tertiary);
+  margin: 0 0 8px 0;
+}
+
+.about-tagline {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  margin: 0;
+  font-style: italic;
+}
+
+.empty-state {
+  text-align: center;
+  padding: var(--space-2xl) var(--space-xl);
+  color: var(--text-tertiary);
+}
+
+.empty-state-icon {
+  font-size: 5rem;
+  margin-bottom: var(--space-lg);
+  opacity: 0.5;
+}
+
+.empty-state h3 {
+  color: var(--text-secondary);
+  margin-bottom: var(--space-sm);
+  font-size: 1.5rem;
+}
+
+.empty-state p {
+  font-size: 1rem;
+  margin: 0;
+}
+
+@media (max-width: 768px) {
+  .empty-state-icon {
+    font-size: 4rem;
+  }
+
+  .empty-state h3 {
+    font-size: 1.2rem;
+  }
+
+  .empty-state p {
+    font-size: 0.9rem;
+  }
+}
+
+.drawer-search-results {
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid var(--border-color);
+}
+
+.search-result-count {
+  font-size: 0.75rem;
+  color: var(--primary-color);
+  font-weight: 600;
+  background: var(--accent-purple-lightest);
+  padding: 3px 8px;
+  border-radius: var(--radius-sm);
+  display: inline-block;
+  margin-bottom: 6px;
+}
+
+.search-results-preview {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.search-result-card-preview {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  padding: 4px 8px;
+  background: var(--background-color);
+  border-radius: var(--radius-sm);
+  border-left: 2px solid var(--primary-color);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+
+.search-result-card-preview:hover {
+  background: var(--accent-purple-lightest);
+  transform: translateX(2px);
+  color: var(--text-primary);
+}
+
+.search-highlight {
+  background-color: rgba(107, 45, 143, 0.2);
+  border-radius: 2px;
+  padding: 1px 2px;
+  font-weight: 600;
+}
+
+.archived-drawers-section-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--text-tertiary);
+  letter-spacing: 0.05em;
+  margin: 32px 0 16px 0;
+  text-transform: uppercase;
+}
+
+.archived-search-result {
+  border: 2px dashed var(--border-color-strong) !important;
+}
+
+.archived-badge {
+  background: #f39c12;
+  color: white;
+  font-size: 0.65rem;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: var(--radius-sm);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.archived-drawer-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 28px 32px;
+  background-color: var(--card-background);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  border: var(--card-border);
+  margin-bottom: 12px;
+  transition: all var(--transition-base);
+}
+
+.archived-drawer-item:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
+}
+
+.archived-drawer-name-container {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
+  min-width: 0;
+}
+
+.archived-drawer-name {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.archived-drawer-count {
+  font-size: 0.85rem;
+  color: var(--text-tertiary);
+  padding: 4px 10px;
+  background: var(--background-color);
+  border-radius: var(--radius-sm);
+  font-weight: 600;
+}
+
+.archived-drawer-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.archived-action-btn {
+  background: transparent;
+  border: 1px solid var(--border-color);
+  color: var(--text-secondary);
+  padding: 8px 16px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: all var(--transition-fast);
+  font-weight: 500;
+}
+
+.restore-btn:hover {
+  background: #e8f5e9;
+  color: #2e7d32;
+  border-color: #2e7d32;
+}
+
+.archived-action-btn.delete-btn:hover {
+  background: #ffebee;
+  color: #c62828;
+  border-color: #c62828;
+}
+
+@media (max-width: 768px) {
+  .archived-drawer-item {
+    padding: 18px 20px;
+  }
+
+  .archived-drawer-name {
+    font-size: 0.95rem;
+  }
+
+  .archived-drawer-count {
+    font-size: 0.75rem;
+    padding: 3px 8px;
+    margin: 0 12px;
+  }
+
+  .archived-action-btn {
+    padding: 6px 12px;
+    font-size: 0.85rem;
+  }
+}
+
+.footer {
+  text-align: center;
+  padding: 24px 20px;
+  margin-top: 48px;
+  color: var(--text-tertiary);
+  font-size: 0.8rem;
+  border-top: 1px solid var(--border-color);
+  background: var(--background-color);
+}
+
+.footer-copyright {
+  font-weight: 500;
+}
+  </style>
+</head>
+<body>
+  <header class="header">
+    <div class="header-title">
+      <h1 id="main-title">Drawers</h1>
+    </div>
+    <div class="header-buttons">
+      <div class="options-dropdown">
+        <button class="toggle-btn" id="optionsDropdownBtn" title="Options">∨</button>
+        <div class="options-dropdown-menu" id="optionsDropdownMenu">
+          <button class="dropdown-item" id="aboutBtn">About</button>
+          <button class="dropdown-item" id="reportBugBtn">Report Bug</button>
+          <button class="dropdown-item" id="archiveBtn">Archive</button>
+          <button class="dropdown-item" id="uploadBtn">Upload Drawer</button>
+          <button class="dropdown-item" id="downloadBtn">Download Drawer</button>
+          <button class="dropdown-item" id="resetBtn">Reset All Data</button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div id="overlay" class="overlay"></div>
+
+  <!-- About Popup -->
+  <div id="about-popup" class="popup about-modal">
+    <div class="popup-header">
+      <h2>About</h2>
+    </div>
+    <div class="popup-body">
+      <div class="about-section">
+        <h3 class="about-heading">Why Drawers?</h3>
+        <p class="about-text">
+          Browser bookmarks only go so far. Designed for casual web browsing, rather than professional knowledge management, they fall short in several critical ways:
+        </p>
+        <ul class="about-list">
+          <li><strong>Chaotic Organization:</strong> Bookmarks pile up in folders with no clear structure.</li>
+          <li><strong>No Context:</strong> You can't add descriptions or explanations about why a resource matters.</li>
+          <li><strong>No Tagging or Filtering:</strong> You're stuck with rigid folder hierarchies.</li>
+        </ul>
+      </div>
+
+      <div class="about-section">
+        <h3 class="about-heading">How Drawers Solves This</h3>
+        <p class="about-text">
+          Drawers reimagines bookmarking as a <strong>contextual knowledge management system</strong> designed for knowledge workers.
+        </p>
+
+        <div class="feature-grid">
+          <div class="feature-item">
+            <div class="feature-icon">🗂️</div>
+            <div class="feature-content">
+              <h4 class="feature-title">Organized Drawers</h4>
+              <p class="feature-desc">Group resources by project, course, or topic.</p>
+            </div>
+          </div>
+
+          <div class="feature-item">
+            <div class="feature-icon">📝</div>
+            <div class="feature-content">
+              <h4 class="feature-title">Rich Context</h4>
+              <p class="feature-desc">Add titles, descriptions, and links to each card.</p>
+            </div>
+          </div>
+
+          <div class="feature-item">
+            <div class="feature-icon">🏷️</div>
+            <div class="feature-content">
+              <h4 class="feature-title">Flexible Tagging</h4>
+              <p class="feature-desc">Create custom tags and apply multiple tags to each card.</p>
+            </div>
+          </div>
+
+          <div class="feature-item">
+            <div class="feature-icon">🔍</div>
+            <div class="feature-content">
+              <h4 class="feature-title">Robust Search</h4>
+              <p class="feature-desc">Search across all drawers and cards instantly.</p>
+            </div>
+          </div>
+
+          <div class="feature-item">
+            <div class="feature-icon">📤</div>
+            <div class="feature-content">
+              <h4 class="feature-title">Easy Sharing</h4>
+              <p class="feature-desc">Export drawers as .drawer files.</p>
+            </div>
+          </div>
+
+          <div class="feature-item">
+            <div class="feature-icon">💾</div>
+            <div class="feature-content">
+              <h4 class="feature-title">Local Storage</h4>
+              <p class="feature-desc">All data stored locally in your browser.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="about-section about-footer">
+        <p class="about-version">Version 1.0</p>
+        <p class="about-tagline">Built for knowledge workers who need more than browser bookmarks.</p>
+      </div>
+    </div>
+    <div class="popup-buttons">
+      <button id="closeAboutBtn">Close</button>
+    </div>
+  </div>
+
+  <!-- Konami Code Easter Egg Popup -->
+  <div id="konami-popup" class="popup konami-modal">
+    <div class="popup-header">
+      <h2>You found the secret! 🎉</h2>
+    </div>
+    <div class="popup-body">
+      <div class="wikipedia-container">
+        <iframe src="https://en.wikipedia.org/wiki/Desire_path" title="Desire path - Wikipedia" frameborder="0" allowfullscreen></iframe>
+      </div>
+    </div>
+    <div class="popup-buttons">
+      <button id="closeKonamiBtn">Close</button>
+    </div>
+  </div>
+
+  <!-- New Drawer Popup -->
+  <div id="popup" class="popup">
+    <div class="popup-header">
+      <h2>New Drawer</h2>
+    </div>
+    <div class="popup-body">
+      <label for="assignment-name">Drawer Name</label>
+      <input type="text" id="assignment-name" placeholder="e.g., Faculty Resources">
+    </div>
+    <div class="popup-buttons" style="position: relative;">
+      <button id="createBankBtn">Create</button>
+      <button id="cancelBankBtn">Cancel</button>
+      <div style="position: absolute; left: 50%; transform: translateX(-50%); margin-top: 8px; white-space: nowrap;">
+        <a id="uploadFromNewDrawerBtn" style="color: var(--primary-color); cursor: pointer; text-decoration: underline; font-size: 0.85rem;">
+          upload existing drawer
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Reset Confirmation Popup -->
+  <div id="clear-data-popup" class="popup">
+    <div class="popup-header">
+      <h2>Are you sure you want to erase your data?</h2>
+    </div>
+    <div class="popup-buttons">
+      <button id="yesClearBtn">Yes, let's erase it all!</button>
+      <button id="noClearBtn">No, never mind.</button>
+    </div>
+  </div>
+
+  <!-- Download Popup -->
+  <div id="download-popup" class="popup">
+    <div class="popup-header">
+      <h2>Download Drawer</h2>
+    </div>
+    <div class="popup-body">
+      <p style="color: var(--text-secondary); font-size: 0.85rem; margin-bottom: 16px;">
+        Select a drawer to download as a .drawer file.
+      </p>
+      <div id="download-options"></div>
+    </div>
+    <div class="popup-buttons">
+      <button id="downloadConfirmBtn">Download</button>
+      <button id="cancelDownloadBtn">Cancel</button>
+    </div>
+  </div>
+
+  <!-- Archive Confirmation Popup -->
+  <div id="archive-confirm-popup" class="popup">
+    <div class="popup-header">
+      <h2>Archive Drawer?</h2>
+    </div>
+    <div class="popup-body">
+      <p style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 16px;">
+        Are you sure you want to archive <strong id="archive-drawer-name"></strong>?
+      </p>
+      <p style="color: var(--text-tertiary); font-size: 0.85rem;">
+        You can restore it later from the Archive.
+      </p>
+    </div>
+    <div class="popup-buttons">
+      <button id="confirmArchiveBtn">Archive</button>
+      <button id="cancelArchiveBtn">Cancel</button>
+    </div>
+  </div>
+
+  <!-- Upload Popup -->
+  <div id="upload-popup" class="popup">
+    <div class="popup-header">
+      <h2>Upload Drawer</h2>
+    </div>
+    <div class="popup-body">
+      <p style="color: var(--text-secondary); font-size: 0.85rem; margin-bottom: 16px;">
+        Upload a .drawer file or paste .drawer file data
+      </p>
+
+      <div style="margin-bottom: 16px;">
+        <label style="display: block; font-weight: 600; margin-bottom: 8px; color: var(--text-primary);">Option 1: Upload Files</label>
+        <div id="drop-zone" class="drop-zone">
+          <div class="drop-zone-content">
+            <span class="drop-zone-icon">📁</span>
+            <p class="drop-zone-text">Drag & drop .drawer files here</p>
+            <p class="drop-zone-subtext">or</p>
+            <label for="upload-input" class="drop-zone-button">Choose Files</label>
+            <input type="file" id="upload-input" accept=".drawer,.json" multiple style="display: none;">
+          </div>
+        </div>
+      </div>
+
+      <div style="text-align: center; color: var(--text-tertiary); margin: 16px 0;">— or —</div>
+
+      <div>
+        <label style="display: block; font-weight: 600; margin-bottom: 8px; color: var(--text-primary);">Option 2: Paste .drawer File Data</label>
+        <textarea
+          id="upload-json-input"
+          placeholder='Paste drawer file data here...'
+          class="json-input"
+        ></textarea>
+      </div>
+    </div>
+    <div class="popup-buttons">
+      <button id="uploadConfirmBtn">Upload</button>
+      <button id="cancelUploadBtn">Cancel</button>
+    </div>
+  </div>
+
+  <!-- Share Popup -->
+  <div id="share-popup" class="popup">
+    <div class="popup-header">
+      <h2>Share Drawer</h2>
+    </div>
+    <div class="popup-body">
+      <p style="color: var(--text-secondary); font-size: 0.85rem; margin-bottom: 16px;">
+        Share "<strong id="share-drawer-name"></strong>" with others
+      </p>
+
+      <div class="share-options">
+        <button class="share-option-btn" id="shareEmailBtn">
+          <span class="share-icon">📧</span>
+          <div class="share-option-content">
+            <div class="share-option-title">Share via Email</div>
+            <div class="share-option-desc">Open email client with drawer data</div>
+          </div>
+          <span class="share-option-tag">simplest</span>
+        </button>
+
+        <button class="share-option-btn" id="shareDownloadBtn">
+          <span class="share-icon">💾</span>
+          <div class="share-option-content">
+            <div class="share-option-title">Download as File</div>
+            <div class="share-option-desc">Save as .drawer file to share manually</div>
+          </div>
+        </button>
+
+        <button class="share-option-btn" id="shareCopyJsonBtn">
+          <span class="share-icon">📋</span>
+          <div class="share-option-content">
+            <div class="share-option-title">Copy .drawer File Data</div>
+            <div class="share-option-desc">Copy drawer data to clipboard</div>
+          </div>
+        </button>
+      </div>
+    </div>
+    <div class="popup-buttons">
+      <button id="cancelShareBtn">Close</button>
+    </div>
+  </div>
+
+  <!-- Tag Manager Popup -->
+  <div id="tag-manager-popup" class="popup tag-manager">
+    <div class="popup-header">
+      <h2>Manage Tags</h2>
+    </div>
+    <div class="popup-body">
+      <p style="color: var(--text-secondary); font-size: 0.8rem; margin-bottom: 12px;">
+        Create custom tags to organize your cards. You can apply multiple tags to each card.
+      </p>
+
+      <div class="tag-list" id="tag-list"></div>
+
+      <div class="tag-form">
+        <div class="tag-form-row">
+          <div class="tag-form-group">
+            <label>Tag Name</label>
+            <input type="text" id="new-tag-name" placeholder="e.g., Important, To Read">
+          </div>
+          <div class="tag-form-group tag-color-group">
+            <label>Color</label>
+            <input type="color" id="new-tag-color" value="#6b2d8f">
+          </div>
+        </div>
+        <button class="btn-primary" id="addTagBtn">+ Add Tag</button>
+      </div>
+    </div>
+
+    <div class="popup-buttons">
+      <button id="doneTagsBtn">Done</button>
+    </div>
+  </div>
+
+  <!-- Add/Edit Card Popup -->
+  <div id="add-comment-popup" class="popup add-comment-modal">
+    <div class="popup-header">
+      <h2 id="comment-modal-title">New Card</h2>
+    </div>
+    <div class="popup-body">
+      <label for="card-title">Title</label>
+      <input type="text" id="card-title" placeholder="Enter card title...">
+
+      <label for="card-link">Link</label>
+      <input type="url" id="card-link" placeholder="Enter URL...">
+
+      <label for="card-description">Description</label>
+      <textarea id="card-description" placeholder="Enter card description..."></textarea>
+
+      <div class="modal-tags-section">
+        <label>Tags (optional)</label>
+        <div class="modal-tags-container" id="modal-tags-container">
+          <span class="no-tags-message">No tags available</span>
+        </div>
+      </div>
+    </div>
+    <div class="popup-buttons">
+      <button id="saveCommentBtn">Save Card</button>
+      <button id="cancelCommentBtn">Cancel</button>
+    </div>
+  </div>
+
+  <div class="container">
+    <!-- Landing Container -->
+    <div id="landing-container">
+      <div class="drawer-search-container">
+        <div class="search-input-wrapper">
+          <input type="text" id="drawer-search" class="drawer-search-input" placeholder="Search drawers and cards...">
+          <button class="search-clear-btn" id="drawer-search-clear" style="display: none;" title="Clear search">×</button>
+        </div>
+      </div>
+
+      <div id="comment-bank-list" class="comment-banks">
+        <div class="add-comment-bank">
+          <button class="add-button" id="addCommentBankBtn">+ Add Drawer</button>
+        </div>
+        <div class="archive-link-container">
+          <button class="archive-link-button" id="goToArchiveBtn">Archive</button>
+        </div>
+      </div>
+      <p class="no-comment-banks" id="no-comment-banks-message">No drawers created yet.</p>
+    </div>
+  </div>
+
+  <!-- Archive Container -->
+  <div id="archive-container" class="comment-container" style="display: none;">
+    <div id="archived-drawers-list" class="comments-list-wrapper"></div>
+  </div>
+
+  <!-- Comment Container -->
+  <div id="comment-container" class="comment-container">
+    <div class="drawer-search-container">
+      <div class="search-input-wrapper">
+        <input type="text" id="comment-search" class="comment-search-input" placeholder="Search cards...">
+        <button class="search-clear-btn" id="comment-search-clear" style="display: none;" title="Clear search">×</button>
+      </div>
+    </div>
+
+    <div class="add-comment-bank">
+      <button class="add-button" id="addCommentBtn">+ Add Card</button>
+    </div>
+
+    <div class="tag-filter-bar collapsed" id="tag-filter-bar">
+      <div class="tag-filter-header">
+        <button class="toggle-filters-btn" id="toggle-filters-btn" title="Toggle filters" style="transform: rotate(-90deg);">▼</button>
+        <span class="filter-count" id="filter-count"></span>
+        <button class="btn-compact" id="manageTagsBtn" title="Manage Tags">🏷️</button>
+        <button class="clear-filters-btn" id="clear-filters-btn" style="display: none;">Clear</button>
+      </div>
+      <div class="tag-filters" id="tag-filters"></div>
+    </div>
+
+    <div class="comments-list-wrapper">
+      <div id="comments-list"></div>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <div class="footer-copyright">
+      © <span id="copyright-year"></span> Alexander Landfair. All rights reserved.
+    </div>
+  </footer>
+
+  <script>
+    // Set current year for copyright
+    document.getElementById('copyright-year').textContent = new Date().getFullYear();
+  </script>
+
+  <script>
+    // State management
+    let commentBanks = [];
+    let currentCommentBankIndex = -1;
+    let activeTagFilters = [];
+    let searchQuery = '';
+
+    // Generate unique IDs
+    function generateId() {
+      return Date.now().toString(36) + Math.random().toString(36).substr(2);
+    }
+
+    // Create URL-friendly slug from drawer name
+    function slugify(text) {
+      return text
+        .toLowerCase()
+        .replace(/[^\w\s-]/g, '') // Remove special characters
+        .replace(/\s+/g, '-')      // Replace spaces with hyphens
+        .replace(/--+/g, '-')      // Replace multiple hyphens with single hyphen
+        .trim();
+    }
+
+    // Basic universal tags for new drawers
+    function getBasicTags() {
+      return [];
+    }
+
+    // Get preloaded drawers
+    function getPreloadedCommentBanks() {
+      const drawers = [
+        {
+          "archived": false,
+          "assignmentName": "Banking & Bills",
+          "comments": [
+            {"title": "My Retirement Account", "description": "401k or IRA account portal", "link": "", "tags": []},
+            {"title": "My Checking Account", "description": "Primary checking account", "link": "", "tags": []},
+            {"title": "My Savings Account", "description": "Emergency fund and savings", "link": "", "tags": []},
+            {"title": "Visa Credit Card", "description": "Visa card account management", "link": "", "tags": []},
+            {"title": "Amex Credit Card", "description": "American Express account", "link": "", "tags": []},
+            {"title": "Mortgage/Rent Payment", "description": "Housing payment portal", "link": "", "tags": []},
+            {"title": "Car Insurance", "description": "Auto insurance policy", "link": "", "tags": []},
+            {"title": "Home Insurance", "description": "Homeowners or renters insurance", "link": "", "tags": []},
+            {"title": "Health Insurance", "description": "Medical insurance portal", "link": "", "tags": []},
+            {"title": "Electric Bill", "description": "Utility company account", "link": "", "tags": []},
+            {"title": "Gas Bill", "description": "Gas utility account", "link": "", "tags": []},
+            {"title": "Water Bill", "description": "Water utility account", "link": "", "tags": []},
+            {"title": "Internet/Cable", "description": "Internet service provider", "link": "", "tags": []},
+            {"title": "Phone Bill", "description": "Mobile phone account", "link": "", "tags": []}
+          ],
+          "tags": []
+        },
+        {
+          "archived": false,
+          "assignmentName": "Subscriptions",
+          "comments": [
+            {"title": "Netflix", "description": "Streaming service for movies and TV shows", "link": "https://www.netflix.com", "tags": []},
+            {"title": "HBO Max", "description": "Premium streaming content", "link": "https://www.max.com", "tags": []},
+            {"title": "Disney+", "description": "Disney, Pixar, Marvel, and Star Wars content", "link": "https://www.disneyplus.com", "tags": []},
+            {"title": "Hulu", "description": "Streaming TV shows and movies", "link": "https://www.hulu.com", "tags": []},
+            {"title": "Amazon Prime", "description": "Prime Video and shopping benefits", "link": "https://www.amazon.com/prime", "tags": []},
+            {"title": "Spotify", "description": "Music streaming service", "link": "https://www.spotify.com", "tags": []},
+            {"title": "Apple Music", "description": "Apple's music streaming platform", "link": "https://music.apple.com", "tags": []},
+            {"title": "YouTube Premium", "description": "Ad-free YouTube and YouTube Music", "link": "https://www.youtube.com/premium", "tags": []},
+            {"title": "New York Times", "description": "News subscription", "link": "https://www.nytimes.com", "tags": []},
+            {"title": "Audible", "description": "Audiobook subscription", "link": "https://www.audible.com", "tags": []}
+          ],
+          "tags": []
+        },
+       
+        {
+          "archived": false,
+          "assignmentName": "Travel & Bookings",
+          "comments": [
+            {"title": "Expedia", "description": "Book flights, hotels, and rental cars", "link": "https://www.expedia.com", "tags": []},
+            {"title": "Booking.com", "description": "Hotel reservations", "link": "https://www.booking.com", "tags": []},
+            {"title": "Airbnb", "description": "Vacation rentals and experiences", "link": "https://www.airbnb.com", "tags": []},
+            {"title": "Delta Airlines", "description": "Flight bookings and SkyMiles", "link": "https://www.delta.com", "tags": []},
+            {"title": "United Airlines", "description": "Flight reservations", "link": "https://www.united.com", "tags": []},
+            {"title": "Uber", "description": "Ride sharing", "link": "https://www.uber.com", "tags": []},
+            {"title": "Lyft", "description": "Ride sharing service", "link": "https://www.lyft.com", "tags": []}
+          ],
+          "tags": []
+        },
+        {
+          "archived": false,
+          "assignmentName": "Health",
+          "comments": [
+            {"title": "MyChart", "description": "Patient portal for medical records", "link": "", "tags": []},
+            {"title": "CVS Pharmacy", "description": "Prescription refills", "link": "https://www.cvs.com", "tags": []},
+            {"title": "Walgreens", "description": "Pharmacy services", "link": "https://www.walgreens.com", "tags": []},
+            {"title": "GoodRx", "description": "Prescription discount service", "link": "https://www.goodrx.com", "tags": []},
+            {"title": "Teladoc", "description": "Virtual doctor visits", "link": "https://www.teladoc.com", "tags": []},
+            {"title": "Headspace", "description": "Meditation and mindfulness app", "link": "https://www.headspace.com", "tags": []},
+            {"title": "MyFitnessPal", "description": "Calorie and fitness tracker", "link": "https://www.myfitnesspal.com", "tags": []}
+          ],
+          "tags": []
+        }
+      ];
+
+      // Sort drawers alphabetically
+      drawers.sort((a, b) => a.assignmentName.localeCompare(b.assignmentName));
+
+      // Sort cards within each drawer alphabetically
+      drawers.forEach(drawer => {
+        if (drawer.comments && drawer.comments.length > 0) {
+          drawer.comments.sort((a, b) => {
+            const titleA = (a.title || 'Untitled').toLowerCase();
+            const titleB = (b.title || 'Untitled').toLowerCase();
+            return titleA.localeCompare(titleB);
+          });
+        }
+      });
+
+      return drawers;
+    }
+
+    // localStorage wrapper
+    function saveData() {
+      localStorage.setItem('drawersData', JSON.stringify(commentBanks));
+    }
+
+    function loadData() {
+      const saved = localStorage.getItem('drawersData');
+      if (saved) {
+        commentBanks = JSON.parse(saved);
+      } else {
+        // Initialize with empty array
+        commentBanks = [];
+      }
+
+      // Always ensure preloaded drawers exist
+      const preloadedBanks = getPreloadedCommentBanks();
+      preloadedBanks.forEach(preloadedBank => {
+        const exists = commentBanks.some(bank => bank.assignmentName === preloadedBank.assignmentName);
+        if (!exists) {
+          commentBanks.unshift(preloadedBank);
+        }
+      });
+
+      saveData(); // Save any changes
+      updateCommentBankList();
+    }
+
+    // Global variable to track which drawer is being archived
+    let drawerToArchiveIndex = -1;
+
+    // Navigation
+    function goToHome(updateHistory = true) {
+      document.getElementById('comment-container').style.display = 'none';
+      document.getElementById('archive-container').style.display = 'none';
+      document.getElementById('landing-container').style.display = 'block';
+      document.querySelector('.container').style.display = 'block';
+      currentCommentBankIndex = -1;
+
+      // Reset header title
+      document.getElementById('main-title').textContent = 'Drawers';
+
+      // Update URL to home
+      if (updateHistory) {
+        history.pushState(null, '', window.location.pathname);
+      }
+    }
+
+    function openCommentBank(index, updateHistory = true, scrollToCardIndex = null) {
+      currentCommentBankIndex = index;
+      const bank = commentBanks[index];
+
+      document.getElementById('landing-container').style.display = 'none';
+      document.getElementById('archive-container').style.display = 'none';
+      document.getElementById('comment-container').style.display = 'block';
+      document.querySelector('.container').style.display = 'none';
+
+      // Update header title to show navigation breadcrumb
+      document.getElementById('main-title').innerHTML = `Drawers <span style="font-weight: 400;">→ ${bank.assignmentName}</span>`;
+
+      // Update search placeholder with drawer name
+      document.getElementById('comment-search').placeholder = `Search within ${bank.assignmentName}`;
+
+      activeTagFilters = [];
+      searchQuery = '';
+      document.getElementById('comment-search').value = '';
+
+      // Reset tag filter state - keep collapsed initially
+      const tagFilterBar = document.getElementById('tag-filter-bar');
+      const toggleBtn = document.getElementById('toggle-filters-btn');
+      tagFilterBar.classList.add('collapsed');
+      toggleBtn.style.transform = 'rotate(-90deg)';
+
+      displayComments(bank.comments);
+      displayTagFilters();
+
+      // Scroll to specific card if requested
+      if (scrollToCardIndex !== null) {
+        setTimeout(() => {
+          const targetCard = document.querySelector(`[data-card-index="${scrollToCardIndex}"]`);
+          if (targetCard) {
+            targetCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            // Briefly highlight the card
+            targetCard.style.backgroundColor = 'var(--accent-purple-lightest)';
+            setTimeout(() => {
+              targetCard.style.backgroundColor = '';
+            }, 2000);
+          }
+        }, 100);
+      }
+
+      // Update URL with drawer slug
+      if (updateHistory) {
+        const slug = slugify(bank.assignmentName);
+        history.pushState({ drawerIndex: index }, '', `#${slug}`);
+      }
+    }
+
+    function openArchiveDrawer(updateHistory = true) {
+      document.getElementById('landing-container').style.display = 'none';
+      document.getElementById('comment-container').style.display = 'none';
+      document.getElementById('archive-container').style.display = 'block';
+      document.querySelector('.container').style.display = 'none';
+
+      // Update header title
+      document.getElementById('main-title').innerHTML = 'Drawers <span style="font-weight: 400;">→ Archive</span>';
+
+      displayArchivedDrawers();
+
+      // Update URL
+      if (updateHistory) {
+        history.pushState({ view: 'archive' }, '', '#archive');
+      }
+    }
+
+    function displayArchivedDrawers() {
+      const list = document.getElementById('archived-drawers-list');
+      list.innerHTML = '';
+
+      const archivedDrawers = commentBanks.filter(bank => bank.archived);
+
+      if (archivedDrawers.length === 0) {
+        list.innerHTML = `
+          <div class="empty-state">
+            <h3>No archived drawers</h3>
+            <p>Archived drawers will appear here</p>
+          </div>
+        `;
+        return;
+      }
+
+      commentBanks.forEach((bank, index) => {
+        if (!bank.archived) return;
+
+        const drawerItem = document.createElement('div');
+        drawerItem.className = 'archived-drawer-item';
+
+        // Name container to hold name and count together
+        const nameContainer = document.createElement('div');
+        nameContainer.className = 'archived-drawer-name-container';
+
+        const nameSpan = document.createElement('span');
+        nameSpan.className = 'archived-drawer-name';
+        nameSpan.textContent = bank.assignmentName;
+
+        const cardCount = document.createElement('span');
+        cardCount.className = 'archived-drawer-count';
+        cardCount.textContent = `${bank.comments.length}`;
+        cardCount.title = `${bank.comments.length} card${bank.comments.length !== 1 ? 's' : ''}`;
+
+        nameContainer.appendChild(nameSpan);
+        nameContainer.appendChild(cardCount);
+
+        const actionsDiv = document.createElement('div');
+        actionsDiv.className = 'archived-drawer-actions';
+
+        const restoreBtn = document.createElement('button');
+        restoreBtn.className = 'archived-action-btn restore-btn';
+        restoreBtn.textContent = '↻ Restore';
+        restoreBtn.title = 'Restore drawer';
+        restoreBtn.onclick = () => {
+          restoreCommentBank(index);
+        };
+
+        const deleteBtn = document.createElement('button');
+        deleteBtn.className = 'archived-action-btn delete-btn';
+        deleteBtn.textContent = '🗑 Delete';
+        deleteBtn.title = 'Delete drawer permanently';
+        deleteBtn.onclick = () => {
+          deleteArchivedCommentBank(index);
+        };
+
+        actionsDiv.appendChild(restoreBtn);
+        actionsDiv.appendChild(deleteBtn);
+
+        drawerItem.appendChild(nameContainer);
+        drawerItem.appendChild(actionsDiv);
+
+        list.appendChild(drawerItem);
+      });
+    }
+
+    function showArchiveConfirmPopup(index) {
+      drawerToArchiveIndex = index;
+      const drawerName = commentBanks[index].assignmentName;
+      document.getElementById('archive-drawer-name').textContent = `"${drawerName}"`;
+      document.getElementById('archive-confirm-popup').style.display = 'flex';
+      document.getElementById('overlay').style.display = 'block';
+    }
+
+    function hideArchiveConfirmPopup() {
+      document.getElementById('archive-confirm-popup').style.display = 'none';
+      document.getElementById('overlay').style.display = 'none';
+      drawerToArchiveIndex = -1;
+    }
+
+    let drawerToShareIndex = -1;
+
+    function showSharePopup(index) {
+      drawerToShareIndex = index;
+      const drawerName = commentBanks[index].assignmentName;
+      document.getElementById('share-drawer-name').textContent = drawerName;
+      document.getElementById('share-popup').style.display = 'flex';
+      document.getElementById('overlay').style.display = 'block';
+    }
+
+    function hideSharePopup() {
+      document.getElementById('share-popup').style.display = 'none';
+      document.getElementById('overlay').style.display = 'none';
+      drawerToShareIndex = -1;
+    }
+
+    function shareDownloadDrawer() {
+      if (drawerToShareIndex !== -1) {
+        downloadDrawer(drawerToShareIndex);
+        hideSharePopup();
+      }
+    }
+
+    function shareCopyJson() {
+      if (drawerToShareIndex !== -1) {
+        const bank = commentBanks[drawerToShareIndex];
+        const json = JSON.stringify(bank, null, 2);
+
+        navigator.clipboard.writeText(json).then(() => {
+          // Show success feedback
+          const btn = document.getElementById('shareCopyJsonBtn');
+          const originalText = btn.querySelector('.share-option-title').textContent;
+          btn.querySelector('.share-option-title').textContent = 'Copied!';
+          btn.style.borderColor = '#2ecc71';
+          btn.style.background = '#d5f4e6';
+
+          setTimeout(() => {
+            btn.querySelector('.share-option-title').textContent = originalText;
+            btn.style.borderColor = '';
+            btn.style.background = '';
+          }, 2000);
+        }).catch(err => {
+          alert('Failed to copy to clipboard');
+          console.error('Copy failed:', err);
+        });
+      }
+    }
+
+    function shareViaEmail() {
+      if (drawerToShareIndex !== -1) {
+        const bank = commentBanks[drawerToShareIndex];
+        const drawerName = bank.assignmentName;
+        const cardCount = bank.comments.length;
+
+        const subject = encodeURIComponent(`Shared Drawer: ${drawerName}`);
+        const body = encodeURIComponent(
+          `Hi there!\n\n` +
+          `I'm sharing a Drawers resource collection with you: "${drawerName}"\n` +
+          `This drawer contains ${cardCount} resource card${cardCount !== 1 ? 's' : ''}.\n\n` +
+          `===========================================\n` +
+          `HOW TO IMPORT THIS DRAWER (for the recipient):\n` +
+          `===========================================\n\n` +
+          `STEP 1: Copy the .drawer file data\n` +
+          `   → Scroll down to the bottom of this email\n` +
+          `   → Select ALL the text between the lines marked "START COPYING HERE" and "STOP COPYING HERE"\n` +
+          `   → Copy it (Cmd+C or Ctrl+C)\n\n` +
+          `STEP 2: Open the Drawers web app\n` +
+          `   → Visit: https://landfair.github.io/DrawersEWPsite/\n\n` +
+          `STEP 3: Upload the drawer\n` +
+          `   → Click the Options button (⚙️) in the top-right corner\n` +
+          `   → Select "Upload Drawer"\n` +
+          `   → Choose "Paste .drawer File Data"\n` +
+          `   → Paste the data you copied (Cmd+V or Ctrl+V)\n` +
+          `   → Click "Upload"\n\n` +
+          `That's it! The drawer and all its cards will appear in your Drawers.\n\n\n` +
+          `═══════════════════════════════════════════\n` +
+          `>>> START COPYING HERE <<<\n` +
+          `═══════════════════════════════════════════\n\n` +
+          `${JSON.stringify(bank, null, 2)}\n\n` +
+          `═══════════════════════════════════════════\n` +
+          `>>> STOP COPYING HERE <<<\n` +
+          `═══════════════════════════════════════════`
+        );
+
+        window.location.href = `mailto:?subject=${subject}&body=${body}`;
+        hideSharePopup();
+      }
+    }
+
+    function confirmArchiveDrawer() {
+      if (drawerToArchiveIndex !== -1) {
+        commentBanks[drawerToArchiveIndex].archived = true;
+        saveData();
+        updateCommentBankList();
+        hideArchiveConfirmPopup();
+      }
+    }
+
+    function restoreCommentBank(index) {
+      commentBanks[index].archived = false;
+      saveData();
+      displayArchivedDrawers();
+      updateCommentBankList();
+    }
+
+    function deleteArchivedCommentBank(index) {
+      const bankName = commentBanks[index].assignmentName;
+      if (confirm(`Permanently delete "${bankName}"? This cannot be undone and will delete all cards in this drawer.`)) {
+        commentBanks.splice(index, 1);
+        saveData();
+        displayArchivedDrawers();
+      }
+    }
+
+    // Display functions
+    function updateCommentBankList() {
+      const list = document.getElementById('comment-bank-list');
+      const addButton = list.querySelector('.add-comment-bank');
+      const archiveButton = list.querySelector('.archive-link-container');
+      const noMessage = document.getElementById('no-comment-banks-message');
+
+      // Clear existing items except add and archive buttons
+      const items = list.querySelectorAll('.comment-bank-link, .archived-drawers-section-header');
+      items.forEach(item => item.remove());
+
+      if (commentBanks.length === 0) {
+        noMessage.style.display = 'block';
+      } else {
+        noMessage.style.display = 'none';
+      }
+
+      // Get search query once
+      const drawerSearch = document.getElementById('drawer-search').value.trim().toLowerCase();
+
+      // Create sorted array of non-archived drawers with original indices
+      const sortedBanks = commentBanks
+        .map((bank, index) => ({ bank, index }))
+        .filter(item => !item.bank.archived)
+        .sort((a, b) => a.bank.assignmentName.localeCompare(b.bank.assignmentName));
+
+      sortedBanks.forEach(({ bank, index }) => {
+
+        let results = [];
+
+        if (drawerSearch) {
+          // Check if drawer name matches
+          const drawerNameMatches = bank.assignmentName.toLowerCase().includes(drawerSearch);
+
+          // Check which cards match
+          results = bank.comments.filter(card => {
+            const title = (card.title || '').toLowerCase();
+            const desc = (card.description || '').toLowerCase();
+            const link = (card.link || '').toLowerCase();
+            return title.includes(drawerSearch) || desc.includes(drawerSearch) || link.includes(drawerSearch);
+          });
+
+          // Skip this drawer if neither the name nor any cards match
+          if (!drawerNameMatches && results.length === 0) {
+            return;
+          }
+        }
+
+        const bankEl = document.createElement('div');
+        bankEl.className = 'comment-bank-link';
+
+        const header = document.createElement('div');
+        header.className = 'comment-bank-header';
+
+        const nameContainer = document.createElement('div');
+        nameContainer.className = 'comment-bank-name-container';
+        nameContainer.style.cursor = 'pointer';
+        nameContainer.onclick = () => openCommentBank(index);
+
+        const name = document.createElement('div');
+        name.className = 'comment-bank-name';
+        name.textContent = bank.assignmentName;
+
+        const count = document.createElement('span');
+        count.className = 'drawer-card-count';
+        count.textContent = bank.comments.length;
+
+        nameContainer.appendChild(name);
+        nameContainer.appendChild(count);
+
+        const actions = document.createElement('div');
+        actions.className = 'comment-bank-actions';
+
+        const shareBtn = document.createElement('button');
+        shareBtn.className = 'bank-action-btn bank-share-btn';
+        shareBtn.textContent = '[share]';
+        shareBtn.title = 'Share drawer';
+        shareBtn.onclick = (e) => {
+          e.stopPropagation();
+          showSharePopup(index);
+        };
+
+        const archiveBtn = document.createElement('button');
+        archiveBtn.className = 'bank-action-btn bank-archive-btn';
+        archiveBtn.textContent = '[archive]';
+        archiveBtn.title = 'Archive drawer';
+        archiveBtn.onclick = (e) => {
+          e.stopPropagation();
+          showArchiveConfirmPopup(index);
+        };
+
+        actions.appendChild(shareBtn);
+        actions.appendChild(archiveBtn);
+        header.appendChild(nameContainer);
+        header.appendChild(actions);
+        bankEl.appendChild(header);
+
+        // Show search results preview if searching and cards match
+        if (drawerSearch && results.length > 0) {
+          const resultsDiv = document.createElement('div');
+          resultsDiv.className = 'drawer-search-results';
+
+          const resultCount = document.createElement('div');
+          resultCount.className = 'search-result-count';
+          resultCount.textContent = `${results.length} match${results.length !== 1 ? 'es' : ''}`;
+          resultsDiv.appendChild(resultCount);
+
+          const preview = document.createElement('div');
+          preview.className = 'search-results-preview';
+
+          results.slice(0, 3).forEach((card, cardIndex) => {
+            const cardPreview = document.createElement('div');
+            cardPreview.className = 'search-result-card-preview';
+            cardPreview.textContent = card.title || 'Untitled';
+            // Find the actual index of this card in the bank's comments array
+            const actualCardIndex = bank.comments.indexOf(card);
+            cardPreview.onclick = (e) => {
+              e.stopPropagation();
+              openCommentBank(index, true, actualCardIndex);
+            };
+            preview.appendChild(cardPreview);
+          });
+
+          resultsDiv.appendChild(preview);
+          bankEl.appendChild(resultsDiv);
+        }
+
+        list.insertBefore(bankEl, archiveButton);
+      });
+
+      // Show archived drawers if there's a search query
+      if (drawerSearch) {
+        const archivedDrawers = commentBanks.filter(bank => bank.archived);
+        const archivedWithResults = [];
+
+        archivedDrawers.forEach((bank, originalIndex) => {
+          // Find the actual index in commentBanks array
+          const index = commentBanks.indexOf(bank);
+
+          // Check if drawer name matches
+          const drawerNameMatches = bank.assignmentName.toLowerCase().includes(drawerSearch);
+
+          // Check which cards match
+          const results = bank.comments.filter(card => {
+            const title = (card.title || '').toLowerCase();
+            const desc = (card.description || '').toLowerCase();
+            const link = (card.link || '').toLowerCase();
+            return title.includes(drawerSearch) || desc.includes(drawerSearch) || link.includes(drawerSearch);
+          });
+
+          // Skip this drawer if neither the name nor any cards match
+          if (!drawerNameMatches && results.length === 0) {
+            return;
+          }
+
+          archivedWithResults.push({ bank, index, results });
+        });
+
+        // Add archived section header if there are archived results
+        if (archivedWithResults.length > 0) {
+          const archivedHeader = document.createElement('div');
+          archivedHeader.className = 'archived-drawers-section-header';
+          archivedHeader.innerHTML = '📦 ARCHIVED DRAWERS';
+          list.insertBefore(archivedHeader, archiveButton);
+        }
+
+        // Display each archived drawer with results
+        archivedWithResults.forEach(({ bank, index, results }) => {
+          const bankEl = document.createElement('div');
+          bankEl.className = 'comment-bank-link archived-search-result';
+
+            const header = document.createElement('div');
+            header.className = 'comment-bank-header';
+
+            const nameContainer = document.createElement('div');
+            nameContainer.className = 'comment-bank-name-container';
+            nameContainer.style.cursor = 'pointer';
+            nameContainer.onclick = () => openCommentBank(index);
+
+            const name = document.createElement('div');
+            name.className = 'comment-bank-name';
+            name.textContent = bank.assignmentName;
+
+            const count = document.createElement('span');
+            count.className = 'drawer-card-count';
+            count.textContent = bank.comments.length;
+
+            nameContainer.appendChild(name);
+            nameContainer.appendChild(count);
+
+            const archivedBadge = document.createElement('span');
+            archivedBadge.className = 'archived-badge';
+            archivedBadge.textContent = 'ARCHIVED';
+
+            header.appendChild(nameContainer);
+            header.appendChild(archivedBadge);
+            bankEl.appendChild(header);
+
+            // Show search results preview
+            if (results.length > 0) {
+              const resultsDiv = document.createElement('div');
+              resultsDiv.className = 'drawer-search-results';
+
+              const resultCount = document.createElement('div');
+              resultCount.className = 'search-result-count';
+              resultCount.textContent = `${results.length} match${results.length !== 1 ? 'es' : ''}`;
+              resultsDiv.appendChild(resultCount);
+
+              const preview = document.createElement('div');
+              preview.className = 'search-results-preview';
+
+              results.slice(0, 3).forEach((card, cardIndex) => {
+                const cardPreview = document.createElement('div');
+                cardPreview.className = 'search-result-card-preview';
+                cardPreview.textContent = card.title || 'Untitled';
+                // Find the actual index of this card in the bank's comments array
+                const actualCardIndex = bank.comments.indexOf(card);
+                cardPreview.onclick = (e) => {
+                  e.stopPropagation();
+                  openCommentBank(index, true, actualCardIndex);
+                };
+                preview.appendChild(cardPreview);
+              });
+
+              resultsDiv.appendChild(preview);
+              bankEl.appendChild(resultsDiv);
+            }
+
+          list.insertBefore(bankEl, archiveButton);
+        });
+      }
+    }
+
+    function displayComments(comments) {
+      const list = document.getElementById('comments-list');
+      list.innerHTML = '';
+
+      const bank = commentBanks[currentCommentBankIndex];
+      if (!bank) return;
+
+      let filtered = comments;
+
+      // Apply tag filters
+      if (activeTagFilters.length > 0) {
+        filtered = filtered.filter(card => {
+          if (!card.tags || card.tags.length === 0) return false;
+          return activeTagFilters.every(filterId => card.tags.includes(filterId));
+        });
+      }
+
+      // Apply search filter
+      if (searchQuery) {
+        const query = searchQuery.toLowerCase();
+        filtered = filtered.filter(card => {
+          const title = (card.title || '').toLowerCase();
+          const desc = (card.description || '').toLowerCase();
+          const link = (card.link || '').toLowerCase();
+          return title.includes(query) || desc.includes(query) || link.includes(query);
+        });
+      }
+
+      if (filtered.length === 0) {
+        list.innerHTML = '<div class="empty-state"><div class="empty-state-icon">🔍</div><h3>No cards found</h3><p>Try adjusting your filters or search query</p></div>';
+        return;
+      }
+
+      // Sort cards alphabetically by title
+      filtered = filtered.sort((a, b) => {
+        const titleA = (a.title || 'Untitled').toLowerCase();
+        const titleB = (b.title || 'Untitled').toLowerCase();
+        return titleA.localeCompare(titleB);
+      });
+
+      filtered.forEach((card, originalIndex) => {
+        // Find original index
+        const realIndex = comments.indexOf(card);
+
+        const cardEl = document.createElement('div');
+        cardEl.className = 'comment';
+        cardEl.dataset.cardIndex = realIndex;
+
+        // Header
+        const header = document.createElement('div');
+        header.className = 'comment-header';
+
+        const tagsContainer = document.createElement('div');
+        tagsContainer.className = 'tags-container';
+
+        if (card.tags && card.tags.length > 0) {
+          card.tags.forEach(tagId => {
+            const tagDef = bank.tags.find(t => t.id === tagId);
+            if (tagDef) {
+              const tag = document.createElement('span');
+              tag.className = 'tag';
+              tag.textContent = tagDef.name;
+              tag.style.borderColor = tagDef.color;
+              tag.style.color = tagDef.color;
+              tag.style.backgroundColor = tagDef.color + '20';
+              tagsContainer.appendChild(tag);
+            }
+          });
+        }
+
+        header.appendChild(tagsContainer);
+        cardEl.appendChild(header);
+
+        // Body
+        const body = document.createElement('div');
+        body.className = 'comment-body';
+
+        const titleRow = document.createElement('div');
+        titleRow.className = 'card-title-row';
+
+        const titleDisplay = document.createElement('div');
+        titleDisplay.className = 'card-title-display';
+
+        if (card.link) {
+          const link = document.createElement('a');
+          link.href = card.link;
+          link.target = '_blank';
+          link.className = 'card-title-link';
+          link.textContent = card.title || 'Untitled';
+          titleDisplay.appendChild(link);
+        } else {
+          titleDisplay.textContent = card.title || 'Untitled';
+        }
+
+        titleRow.appendChild(titleDisplay);
+
+        if (card.link) {
+          const copyBtn = document.createElement('button');
+          copyBtn.className = 'copy-link-btn';
+          copyBtn.textContent = '🔗';
+          copyBtn.title = 'Copy link';
+          copyBtn.onclick = () => {
+            navigator.clipboard.writeText(card.link).then(() => {
+              copyBtn.textContent = '✓';
+              setTimeout(() => copyBtn.textContent = '🔗', 1000);
+            });
+          };
+          titleRow.appendChild(copyBtn);
+        }
+
+        body.appendChild(titleRow);
+
+        if (card.description) {
+          const descWrapper = document.createElement('div');
+          descWrapper.className = 'card-description-wrapper';
+
+          const desc = document.createElement('div');
+          desc.className = 'card-description-display collapsed';
+          desc.textContent = card.description;
+
+          const toggle = document.createElement('button');
+          toggle.className = 'description-toggle';
+          toggle.textContent = 'Show more';
+          toggle.onclick = () => {
+            if (desc.classList.contains('collapsed')) {
+              desc.classList.remove('collapsed');
+              toggle.textContent = 'Show less';
+            } else {
+              desc.classList.add('collapsed');
+              toggle.textContent = 'Show more';
+            }
+          };
+
+          descWrapper.appendChild(desc);
+          descWrapper.appendChild(toggle);
+          body.appendChild(descWrapper);
+        }
+
+        cardEl.appendChild(body);
+
+        // Footer
+        const footer = document.createElement('div');
+        footer.className = 'comment-footer';
+
+        const actions = document.createElement('div');
+        actions.className = 'comment-actions-inline';
+
+        const editBtn = document.createElement('button');
+        editBtn.textContent = 'Edit';
+        editBtn.onclick = () => editComment(realIndex);
+
+        const deleteBtn = document.createElement('button');
+        deleteBtn.textContent = 'Delete';
+        deleteBtn.onclick = () => deleteComment(realIndex);
+
+        actions.appendChild(editBtn);
+        actions.appendChild(deleteBtn);
+        footer.appendChild(actions);
+        cardEl.appendChild(footer);
+
+        list.appendChild(cardEl);
+      });
+    }
+
+    function displayTagFilters() {
+      const container = document.getElementById('tag-filters');
+      const countSpan = document.getElementById('filter-count');
+      const clearBtn = document.getElementById('clear-filters-btn');
+
+      container.innerHTML = '';
+
+      const bank = commentBanks[currentCommentBankIndex];
+      if (!bank || !bank.tags || bank.tags.length === 0) {
+        countSpan.textContent = 'No tags available';
+        clearBtn.style.display = 'none';
+        return;
+      }
+
+      countSpan.textContent = activeTagFilters.length > 0
+        ? `${activeTagFilters.length} filter${activeTagFilters.length !== 1 ? 's' : ''} active`
+        : 'Filter by tags';
+
+      clearBtn.style.display = activeTagFilters.length > 0 ? 'block' : 'none';
+
+      bank.tags.forEach(tag => {
+        const filterEl = document.createElement('span');
+        filterEl.className = 'tag-filter';
+        filterEl.textContent = tag.name;
+        filterEl.style.borderColor = tag.color;
+        filterEl.style.color = tag.color;
+        filterEl.style.backgroundColor = tag.color + '20';
+
+        if (activeTagFilters.includes(tag.id)) {
+          filterEl.classList.add('active');
+        }
+
+        filterEl.onclick = () => {
+          if (activeTagFilters.includes(tag.id)) {
+            activeTagFilters = activeTagFilters.filter(id => id !== tag.id);
+          } else {
+            activeTagFilters.push(tag.id);
+          }
+          displayTagFilters();
+          displayComments(bank.comments);
+        };
+
+        container.appendChild(filterEl);
+      });
+    }
+
+    // CRUD operations
+    function addComment() {
+      document.getElementById('card-title').value = '';
+      document.getElementById('card-link').value = '';
+      document.getElementById('card-description').value = '';
+      document.getElementById('add-comment-popup').removeAttribute('data-index');
+      document.getElementById('comment-modal-title').textContent = 'New Card';
+      populateModalTags();
+      showAddCommentPopup();
+    }
+
+    function editComment(index) {
+      const bank = commentBanks[currentCommentBankIndex];
+      const card = bank.comments[index];
+
+      document.getElementById('card-title').value = card.title || '';
+      document.getElementById('card-link').value = card.link || '';
+      document.getElementById('card-description').value = card.description || '';
+      document.getElementById('add-comment-popup').setAttribute('data-index', index);
+      document.getElementById('comment-modal-title').textContent = 'Edit Card';
+      populateModalTags(card.tags || []);
+      showAddCommentPopup();
+    }
+
+    function deleteComment(index) {
+      if (!confirm('Delete this card?')) return;
+
+      const bank = commentBanks[currentCommentBankIndex];
+      bank.comments.splice(index, 1);
+
+      saveData();
+      displayComments(bank.comments);
+    }
+
+    function saveComment() {
+      const title = document.getElementById('card-title').value.trim();
+      const link = document.getElementById('card-link').value.trim();
+      const description = document.getElementById('card-description').value.trim();
+
+      if (!title) {
+        alert('Please enter a title');
+        return;
+      }
+
+      const bank = commentBanks[currentCommentBankIndex];
+      const selectedTags = Array.from(document.querySelectorAll('.modal-tag.selected'))
+        .map(el => el.dataset.tagId);
+
+      const card = { title, link, description, tags: selectedTags };
+
+      const indexAttr = document.getElementById('add-comment-popup').getAttribute('data-index');
+      if (indexAttr !== null) {
+        // Edit
+        bank.comments[parseInt(indexAttr)] = card;
+      } else {
+        // New
+        bank.comments.push(card);
+      }
+
+      saveData();
+      displayComments(bank.comments);
+      hideAddCommentPopup();
+    }
+
+    function populateModalTags(selectedTags = []) {
+      const container = document.getElementById('modal-tags-container');
+      container.innerHTML = '';
+
+      const bank = commentBanks[currentCommentBankIndex];
+      if (!bank || !bank.tags || bank.tags.length === 0) {
+        container.innerHTML = '<span class="no-tags-message">No tags available</span>';
+        return;
+      }
+
+      bank.tags.forEach(tag => {
+        const tagEl = document.createElement('span');
+        tagEl.className = 'modal-tag';
+        tagEl.textContent = tag.name;
+        tagEl.dataset.tagId = tag.id;
+        tagEl.style.borderColor = tag.color;
+        tagEl.style.color = tag.color;
+        tagEl.style.backgroundColor = tag.color + '20';
+
+        if (selectedTags.includes(tag.id)) {
+          tagEl.classList.add('selected');
+        }
+
+        tagEl.onclick = () => {
+          tagEl.classList.toggle('selected');
+        };
+
+        container.appendChild(tagEl);
+      });
+    }
+
+    // Tag management
+    function showTagManager() {
+      const bank = commentBanks[currentCommentBankIndex];
+      if (!bank) return;
+
+      displayTagList();
+      document.getElementById('tag-manager-popup').style.display = 'flex';
+      document.getElementById('overlay').style.display = 'block';
+    }
+
+    function displayTagList() {
+      const list = document.getElementById('tag-list');
+      list.innerHTML = '';
+
+      const bank = commentBanks[currentCommentBankIndex];
+      if (!bank.tags || bank.tags.length === 0) {
+        list.innerHTML = '<div style="padding: 20px; text-align: center; color: #888;">No tags created yet</div>';
+        return;
+      }
+
+      bank.tags.forEach((tag, index) => {
+        const item = document.createElement('div');
+        item.className = 'tag-list-item';
+
+        const tagSpan = document.createElement('span');
+        tagSpan.className = 'tag';
+        tagSpan.textContent = tag.name;
+        tagSpan.style.borderColor = tag.color;
+        tagSpan.style.color = tag.color;
+        tagSpan.style.backgroundColor = tag.color + '20';
+
+        const actions = document.createElement('div');
+        actions.className = 'tag-list-actions';
+
+        const deleteBtn = document.createElement('button');
+        deleteBtn.textContent = 'Delete';
+        deleteBtn.style.background = '#fee';
+        deleteBtn.style.color = '#c00';
+        deleteBtn.onclick = () => {
+          if (!confirm(`Delete tag "${tag.name}"?`)) return;
+          bank.tags.splice(index, 1);
+          // Remove from all cards
+          bank.comments.forEach(card => {
+            if (card.tags) {
+              card.tags = card.tags.filter(id => id !== tag.id);
+            }
+          });
+          saveData();
+          displayTagList();
+          displayTagFilters();
+          displayComments(bank.comments);
+        };
+
+        actions.appendChild(deleteBtn);
+        item.appendChild(tagSpan);
+        item.appendChild(actions);
+        list.appendChild(item);
+      });
+    }
+
+    function addTag() {
+      const name = document.getElementById('new-tag-name').value.trim();
+      const color = document.getElementById('new-tag-color').value;
+
+      if (!name) {
+        alert('Please enter a tag name');
+        return;
+      }
+
+      const bank = commentBanks[currentCommentBankIndex];
+      if (!bank.tags) bank.tags = [];
+
+      bank.tags.push({
+        id: generateId(),
+        name: name,
+        color: color
+      });
+
+      saveData();
+      displayTagList();
+      displayTagFilters();
+
+      document.getElementById('new-tag-name').value = '';
+      document.getElementById('new-tag-color').value = '#6b2d8f';
+    }
+
+    // Download/Upload
+    function showDownloadPopup() {
+      const container = document.getElementById('download-options');
+      container.innerHTML = '';
+
+      if (commentBanks.length === 0) {
+        container.innerHTML = '<p style="text-align: center; color: #888;">No drawers to download</p>';
+      } else {
+        commentBanks.forEach((bank, index) => {
+          const option = document.createElement('div');
+          option.style.padding = '8px';
+          option.style.marginBottom = '4px';
+          option.style.background = '#f5f5f5';
+          option.style.borderRadius = '6px';
+          option.style.cursor = 'pointer';
+          option.textContent = bank.assignmentName;
+          option.onclick = () => downloadDrawer(index);
+          container.appendChild(option);
+        });
+      }
+
+      document.getElementById('download-popup').style.display = 'flex';
+      document.getElementById('overlay').style.display = 'block';
+    }
+
+    function downloadDrawer(index) {
+      const bank = commentBanks[index];
+      const json = JSON.stringify(bank, null, 2);
+      const blob = new Blob([json], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `${bank.assignmentName.replace(/[^a-z0-9]/gi, '_')}.drawer`;
+      a.click();
+      URL.revokeObjectURL(url);
+      hideDownloadPopup();
+    }
+
+    function uploadDrawer() {
+      const fileInput = document.getElementById('upload-input');
+      const jsonInput = document.getElementById('upload-json-input');
+      const files = fileInput.files;
+      const pastedJson = jsonInput.value.trim();
+
+      // Check if user provided pasted JSON
+      if (pastedJson) {
+        try {
+          const data = JSON.parse(pastedJson);
+
+          // Validate that it's a drawer object
+          if (!data.assignmentName || !Array.isArray(data.comments)) {
+            alert('Invalid drawer format. Please paste valid .drawer file data.');
+            return;
+          }
+
+          commentBanks.push(data);
+          saveData();
+          updateCommentBankList();
+          hideUploadPopup();
+          jsonInput.value = '';
+          fileInput.value = '';
+          alert(`Successfully imported "${data.assignmentName}" with ${data.comments.length} card${data.comments.length !== 1 ? 's' : ''}!`);
+        } catch (err) {
+          alert('Invalid .drawer file format. Please check the pasted data and try again.');
+          console.error('JSON parse error:', err);
+        }
+        return;
+      }
+
+      // Otherwise check for file upload
+      if (!files || files.length === 0) {
+        alert('Please select a file or paste .drawer file data');
+        return;
+      }
+
+      // Process multiple files
+      let successCount = 0;
+      let errorCount = 0;
+      const importedDrawers = [];
+
+      const processFile = (file, index) => {
+        return new Promise((resolve) => {
+          const reader = new FileReader();
+          reader.onload = (e) => {
+            try {
+              const data = JSON.parse(e.target.result);
+
+              // Validate that it's a drawer object
+              if (!data.assignmentName || !Array.isArray(data.comments)) {
+                errorCount++;
+                resolve();
+                return;
+              }
+
+              commentBanks.push(data);
+              importedDrawers.push(data.assignmentName);
+              successCount++;
+              resolve();
+            } catch (err) {
+              errorCount++;
+              console.error('File parse error:', err);
+              resolve();
+            }
+          };
+          reader.readAsText(file);
+        });
+      };
+
+      // Process all files
+      const filePromises = Array.from(files).map((file, index) => processFile(file, index));
+
+      Promise.all(filePromises).then(() => {
+        saveData();
+        updateCommentBankList();
+        hideUploadPopup();
+        fileInput.value = '';
+        jsonInput.value = '';
+
+        // Show summary message
+        let message = '';
+        if (successCount > 0) {
+          message += `Successfully imported ${successCount} drawer${successCount !== 1 ? 's' : ''}:\n`;
+          importedDrawers.forEach(name => {
+            message += `• ${name}\n`;
+          });
+        }
+        if (errorCount > 0) {
+          message += `\n${errorCount} file${errorCount !== 1 ? 's' : ''} failed to import.`;
+        }
+        alert(message || 'No valid drawers found.');
+      });
+    }
+
+    // Modal controls
+    function showPopup() {
+      document.getElementById('popup').style.display = 'flex';
+      document.getElementById('overlay').style.display = 'block';
+      document.getElementById('assignment-name').focus();
+    }
+
+    function hidePopup() {
+      document.getElementById('popup').style.display = 'none';
+      document.getElementById('overlay').style.display = 'none';
+    }
+
+    function showAddCommentPopup() {
+      document.getElementById('add-comment-popup').style.display = 'flex';
+      document.getElementById('overlay').style.display = 'block';
+    }
+
+    function hideAddCommentPopup() {
+      document.getElementById('add-comment-popup').style.display = 'none';
+      document.getElementById('overlay').style.display = 'none';
+    }
+
+    function hideDownloadPopup() {
+      document.getElementById('download-popup').style.display = 'none';
+      document.getElementById('overlay').style.display = 'none';
+    }
+
+    function hideUploadPopup() {
+      document.getElementById('upload-popup').style.display = 'none';
+      document.getElementById('overlay').style.display = 'none';
+      // Clear both inputs when closing
+      document.getElementById('upload-input').value = '';
+      document.getElementById('upload-json-input').value = '';
+    }
+
+    function hideTagManager() {
+      document.getElementById('tag-manager-popup').style.display = 'none';
+      document.getElementById('overlay').style.display = 'none';
+    }
+
+    function hideAbout() {
+      document.getElementById('about-popup').style.display = 'none';
+      document.getElementById('overlay').style.display = 'none';
+    }
+
+    function showAbout() {
+      document.getElementById('about-popup').style.display = 'flex';
+      document.getElementById('overlay').style.display = 'block';
+    }
+
+    function showKonami() {
+      document.getElementById('konami-popup').style.display = 'flex';
+      document.getElementById('overlay').style.display = 'block';
+    }
+
+    function hideKonami() {
+      document.getElementById('konami-popup').style.display = 'none';
+      document.getElementById('overlay').style.display = 'none';
+    }
+
+    // Konami Code Easter Egg
+    const konamiCode = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'b', 'a'];
+    let konamiIndex = 0;
+
+    document.addEventListener('keydown', (e) => {
+      const key = e.key.toLowerCase();
+      const expectedKey = konamiCode[konamiIndex].toLowerCase();
+
+      if (key === expectedKey || e.key === konamiCode[konamiIndex]) {
+        konamiIndex++;
+        if (konamiIndex === konamiCode.length) {
+          showKonami();
+          konamiIndex = 0;
+        }
+      } else {
+        konamiIndex = 0;
+      }
+    });
+
+    // Event listeners
+    document.getElementById('addCommentBankBtn').onclick = showPopup;
+    document.getElementById('goToArchiveBtn').onclick = () => openArchiveDrawer();
+    document.getElementById('cancelBankBtn').onclick = hidePopup;
+    document.getElementById('createBankBtn').onclick = () => {
+      const name = document.getElementById('assignment-name').value.trim();
+      if (!name) {
+        alert('Please enter a drawer name');
+        return;
+      }
+
+      if (commentBanks.some(b => b.assignmentName.toLowerCase() === name.toLowerCase())) {
+        alert('A drawer with this name already exists');
+        return;
+      }
+
+      commentBanks.push({
+        assignmentName: name,
+        comments: [],
+        tags: getBasicTags(),
+        archived: false
+      });
+
+      saveData();
+      updateCommentBankList();
+      document.getElementById('assignment-name').value = '';
+      hidePopup();
+    };
+
+    document.getElementById('uploadFromNewDrawerBtn').onclick = () => {
+      hidePopup();
+      document.getElementById('upload-popup').style.display = 'flex';
+      document.getElementById('overlay').style.display = 'block';
+    };
+
+    document.getElementById('main-title').onclick = goToHome;
+    document.getElementById('addCommentBtn').onclick = addComment;
+    document.getElementById('saveCommentBtn').onclick = saveComment;
+    document.getElementById('cancelCommentBtn').onclick = hideAddCommentPopup;
+    document.getElementById('manageTagsBtn').onclick = showTagManager;
+    document.getElementById('doneTagsBtn').onclick = hideTagManager;
+    document.getElementById('addTagBtn').onclick = addTag;
+    document.getElementById('optionsDropdownBtn').onclick = () => {
+      document.getElementById('optionsDropdownMenu').classList.toggle('show');
+    };
+
+    document.getElementById('aboutBtn').onclick = () => {
+      document.getElementById('optionsDropdownMenu').classList.remove('show');
+      showAbout();
+    };
+
+    document.getElementById('reportBugBtn').onclick = () => {
+      document.getElementById('optionsDropdownMenu').classList.remove('show');
+      window.open('https://forms.gle/8dLWgUPiDJGExTQ96', '_blank');
+    };
+
+    document.getElementById('archiveBtn').onclick = () => {
+      document.getElementById('optionsDropdownMenu').classList.remove('show');
+      openArchiveDrawer();
+    };
+
+    document.getElementById('confirmArchiveBtn').onclick = confirmArchiveDrawer;
+    document.getElementById('cancelArchiveBtn').onclick = hideArchiveConfirmPopup;
+
+    document.getElementById('shareEmailBtn').onclick = shareViaEmail;
+    document.getElementById('shareDownloadBtn').onclick = shareDownloadDrawer;
+    document.getElementById('shareCopyJsonBtn').onclick = shareCopyJson;
+    document.getElementById('cancelShareBtn').onclick = hideSharePopup;
+
+    document.getElementById('closeAboutBtn').onclick = hideAbout;
+    document.getElementById('closeKonamiBtn').onclick = hideKonami;
+
+    document.getElementById('downloadBtn').onclick = () => {
+      document.getElementById('optionsDropdownMenu').classList.remove('show');
+      showDownloadPopup();
+    };
+
+    document.getElementById('cancelDownloadBtn').onclick = hideDownloadPopup;
+
+    document.getElementById('uploadBtn').onclick = () => {
+      document.getElementById('optionsDropdownMenu').classList.remove('show');
+      document.getElementById('upload-popup').style.display = 'flex';
+      document.getElementById('overlay').style.display = 'block';
+    };
+
+    document.getElementById('uploadConfirmBtn').onclick = uploadDrawer;
+    document.getElementById('cancelUploadBtn').onclick = hideUploadPopup;
+
+    // Drag and drop functionality
+    const dropZone = document.getElementById('drop-zone');
+    const fileInput = document.getElementById('upload-input');
+
+    // Prevent default drag behaviors
+    ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+      dropZone.addEventListener(eventName, (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+      });
+    });
+
+    // Add visual feedback on drag over
+    ['dragenter', 'dragover'].forEach(eventName => {
+      dropZone.addEventListener(eventName, () => {
+        dropZone.classList.add('drag-over');
+      });
+    });
+
+    // Remove visual feedback on drag leave
+    dropZone.addEventListener('dragleave', () => {
+      dropZone.classList.remove('drag-over');
+    });
+
+    // Handle dropped files
+    dropZone.addEventListener('drop', (e) => {
+      dropZone.classList.remove('drag-over');
+      const files = e.dataTransfer.files;
+      if (files.length > 0) {
+        fileInput.files = files;
+        uploadDrawer();
+      }
+    });
+
+    // Click on drop zone to open file picker
+    dropZone.addEventListener('click', (e) => {
+      if (!e.target.matches('label[for="upload-input"]')) {
+        fileInput.click();
+      }
+    });
+
+    document.getElementById('resetBtn').onclick = () => {
+      document.getElementById('optionsDropdownMenu').classList.remove('show');
+      document.getElementById('clear-data-popup').style.display = 'flex';
+      document.getElementById('overlay').style.display = 'block';
+    };
+
+    document.getElementById('yesClearBtn').onclick = () => {
+      commentBanks = [];
+      saveData();
+      updateCommentBankList();
+      goToHome();
+      document.getElementById('clear-data-popup').style.display = 'none';
+      document.getElementById('overlay').style.display = 'none';
+    };
+
+    document.getElementById('noClearBtn').onclick = () => {
+      document.getElementById('clear-data-popup').style.display = 'none';
+      document.getElementById('overlay').style.display = 'none';
+    };
+
+    document.getElementById('toggle-filters-btn').onclick = () => {
+      const tagFilterBar = document.getElementById('tag-filter-bar');
+      const toggleBtn = document.getElementById('toggle-filters-btn');
+      tagFilterBar.classList.toggle('collapsed');
+
+      // Rotate the arrow
+      if (tagFilterBar.classList.contains('collapsed')) {
+        toggleBtn.style.transform = 'rotate(-90deg)';
+      } else {
+        toggleBtn.style.transform = 'rotate(0deg)';
+      }
+    };
+
+    document.getElementById('clear-filters-btn').onclick = () => {
+      activeTagFilters = [];
+      const bank = commentBanks[currentCommentBankIndex];
+      displayTagFilters();
+      displayComments(bank.comments);
+    };
+
+    document.getElementById('comment-search').oninput = (e) => {
+      searchQuery = e.target.value.trim().toLowerCase();
+      const bank = commentBanks[currentCommentBankIndex];
+      displayComments(bank.comments);
+
+      const clearBtn = document.getElementById('comment-search-clear');
+      clearBtn.style.display = searchQuery ? 'block' : 'none';
+    };
+
+    document.getElementById('comment-search-clear').onclick = () => {
+      document.getElementById('comment-search').value = '';
+      searchQuery = '';
+      const bank = commentBanks[currentCommentBankIndex];
+      displayComments(bank.comments);
+      document.getElementById('comment-search-clear').style.display = 'none';
+    };
+
+    document.getElementById('drawer-search').oninput = (e) => {
+      updateCommentBankList();
+      const clearBtn = document.getElementById('drawer-search-clear');
+      clearBtn.style.display = e.target.value ? 'block' : 'none';
+    };
+
+    document.getElementById('drawer-search-clear').onclick = () => {
+      document.getElementById('drawer-search').value = '';
+      updateCommentBankList();
+      document.getElementById('drawer-search-clear').style.display = 'none';
+    };
+
+    // Close overlay
+    document.getElementById('overlay').onclick = () => {
+      hidePopup();
+      hideAddCommentPopup();
+      hideDownloadPopup();
+      hideUploadPopup();
+      hideTagManager();
+      hideAbout();
+      hideArchiveConfirmPopup();
+      hideSharePopup();
+      document.getElementById('clear-data-popup').style.display = 'none';
+      document.getElementById('overlay').style.display = 'none';
+      document.getElementById('optionsDropdownMenu').classList.remove('show');
+    };
+
+    // Close dropdown when clicking outside
+    window.onclick = (e) => {
+      if (!e.target.matches('.toggle-btn')) {
+        const dropdown = document.getElementById('optionsDropdownMenu');
+        if (dropdown.classList.contains('show')) {
+          dropdown.classList.remove('show');
+        }
+      }
+    };
+
+    // Enter key for new drawer
+    document.getElementById('assignment-name').onkeypress = (e) => {
+      if (e.key === 'Enter') {
+        document.getElementById('createBankBtn').click();
+      }
+    };
+
+    // Handle browser back/forward buttons
+    window.addEventListener('popstate', (event) => {
+      const hash = window.location.hash.substring(1); // Remove the '#'
+
+      if (!hash) {
+        // No hash, go to home
+        goToHome(false); // false = don't update history again
+      } else if (hash === 'archive') {
+        // Open archive
+        openArchiveDrawer(false);
+      } else {
+        // Find drawer by slug
+        const index = commentBanks.findIndex(bank => slugify(bank.assignmentName) === hash);
+        if (index !== -1) {
+          openCommentBank(index, false); // false = don't update history again
+        } else {
+          goToHome(false);
+        }
+      }
+    });
+
+    // Load drawer from URL on initial page load
+    function loadFromURL() {
+      const hash = window.location.hash.substring(1);
+      if (hash === 'archive') {
+        openArchiveDrawer(false);
+      } else if (hash) {
+        const index = commentBanks.findIndex(bank => slugify(bank.assignmentName) === hash);
+        if (index !== -1) {
+          openCommentBank(index, false);
+        }
+      }
+    }
+
+    // Initialize
+    loadData();
+    loadFromURL();
+  </script>
+</body>
+</html>
