@@ -1976,6 +1976,7 @@ header {
           <button class="dropdown-item" id="uploadBtn">Upload Drawer</button>
           <button class="dropdown-item" id="downloadBtn">Download Drawer</button>
           <button class="dropdown-item" id="resetBtn">Reset All Data</button>
+          <button class="dropdown-item" id="getChromeExtensionBtn">Get Chrome Extension</button>
         </div>
       </div>
     </div>
@@ -3722,6 +3723,11 @@ header {
     document.getElementById('reportBugBtn').onclick = () => {
       document.getElementById('optionsDropdownMenu').classList.remove('show');
       window.open('https://forms.gle/8dLWgUPiDJGExTQ96', '_blank');
+    };
+
+    document.getElementById('getChromeExtensionBtn').onclick = () => {
+      document.getElementById('optionsDropdownMenu').classList.remove('show');
+      window.open('https://setup.drawers.me', '_blank');
     };
 
     document.getElementById('archiveBtn').onclick = () => {
