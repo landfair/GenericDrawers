@@ -2068,6 +2068,43 @@ header {
     </div>
   </div>
 
+  <!-- Welcome Popup -->
+  <div id="welcome-popup" class="popup welcome-modal">
+    <div class="popup-header">
+      <h2>Welcome to Drawers! 👋</h2>
+    </div>
+    <div class="popup-body">
+      <p style="color: var(--text-secondary); font-size: 1rem; line-height: 1.6; margin-bottom: 20px;">
+        Thanks for trying out Drawers! This is the standalone web version, perfect for exploring the features.
+      </p>
+
+      <div class="welcome-section">
+        <h3 style="color: var(--primary-color); font-size: 1.1rem; font-weight: 600; margin-bottom: 12px;">
+          Want a better experience?
+        </h3>
+        <p style="color: var(--text-secondary); font-size: 0.95rem; line-height: 1.6; margin-bottom: 16px;">
+          The <strong>Chrome Extension</strong> version gives you:
+        </p>
+        <ul style="color: var(--text-secondary); font-size: 0.95rem; line-height: 1.8; margin-left: 20px; margin-bottom: 20px;">
+          <li>Quick access from your browser toolbar</li>
+          <li>Faster loading and smoother performance</li>
+          <li>Gather tabs directly from any webpage</li>
+          <li>All the same features you see here</li>
+        </ul>
+
+        <a href="https://landfair.github.io/DrawersSetup/"
+           target="_blank"
+           class="welcome-cta-button"
+           style="display: inline-block; padding: 12px 24px; background: var(--primary-gradient); color: white; text-decoration: none; border-radius: var(--radius-md); font-weight: 600; box-shadow: var(--shadow-sm); transition: all var(--transition-base);">
+          Get the Chrome Extension →
+        </a>
+      </div>
+    </div>
+    <div class="popup-buttons">
+      <button id="closeWelcomeBtn">Continue with Web Version</button>
+    </div>
+  </div>
+
   <!-- Konami Code Easter Egg Popup -->
   <div id="konami-popup" class="popup konami-modal">
     <div class="popup-header">
@@ -3600,6 +3637,18 @@ header {
       document.getElementById('overlay').style.display = 'none';
     }
 
+    function showWelcome() {
+      document.getElementById('welcome-popup').style.display = 'flex';
+      document.getElementById('overlay').style.display = 'block';
+    }
+
+    function hideWelcome() {
+      document.getElementById('welcome-popup').style.display = 'none';
+      document.getElementById('overlay').style.display = 'none';
+      // Mark that user has seen the welcome popup
+      localStorage.setItem('drawersWelcomeSeen', 'true');
+    }
+
     // Konami Code Easter Egg
     const konamiCode = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'b', 'a'];
     let konamiIndex = 0;
@@ -3690,6 +3739,7 @@ header {
 
     document.getElementById('closeAboutBtn').onclick = hideAbout;
     document.getElementById('closeKonamiBtn').onclick = hideKonami;
+    document.getElementById('closeWelcomeBtn').onclick = hideWelcome;
 
     document.getElementById('downloadBtn').onclick = () => {
       document.getElementById('optionsDropdownMenu').classList.remove('show');
@@ -3886,6 +3936,13 @@ header {
     // Initialize
     loadData();
     loadFromURL();
+
+    // Show welcome popup for first-time visitors
+    const hasSeenWelcome = localStorage.getItem('drawersWelcomeSeen');
+    if (!hasSeenWelcome) {
+      // Small delay to let the page load first
+      setTimeout(showWelcome, 500);
+    }
   </script>
 </body>
 </html>
