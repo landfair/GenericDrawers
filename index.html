@@ -320,21 +320,23 @@ header {
 }
 
 .popup-header {
-  padding: 20px 24px 16px;
-  border-bottom: 1px solid #f0f0f0;
+  padding: var(--space-lg) var(--space-lg) var(--space-md);
+  border-bottom: 1px solid var(--border-color);
   flex-shrink: 0;
+  background: var(--header-background);
 }
 
 .popup-header h2 {
   margin: 0;
-  font-size: 1.2rem;
-  color: #0a0a0a;
+  font-size: 1.25rem;
+  color: var(--text-primary);
   text-align: left;
-  font-weight: 600;
+  font-weight: 700;
+  letter-spacing: -0.01em;
 }
 
 .popup-body {
-  padding: 16px 24px 12px;
+  padding: var(--space-lg);
   overflow-y: auto;
   flex: 1 1 auto;
   min-height: 0;
@@ -345,69 +347,129 @@ header {
   display: block;
   font-size: 0.8125rem;
   font-weight: 600;
-  color: #2a2a2a;
-  margin-bottom: 6px;
+  color: var(--text-primary);
+  margin-bottom: var(--space-sm);
   text-align: left;
+  letter-spacing: 0.01em;
 }
 
 .popup input[type="text"],
 .popup input[type="url"] {
   font-size: 0.9375rem;
-  padding: 13px 16px;
+  padding: 12px 14px;
   width: 100%;
-  border: 1px solid #d8d8d8;
-  border-radius: 10px;
-  background-color: #fafafa;
-  transition: all 0.2s;
+  border: 2px solid var(--border-color);
+  border-radius: var(--radius-md);
+  background-color: var(--input-background);
+  transition: all var(--transition-base);
   box-sizing: border-box;
-  margin-bottom: 12px;
+  margin-bottom: var(--space-md);
+  font-family: 'Montserrat', sans-serif;
+  color: var(--text-primary);
+}
+
+.popup input[type="text"]::placeholder,
+.popup input[type="url"]::placeholder {
+  color: var(--text-tertiary);
 }
 
 .popup input:focus {
   outline: none;
-  background-color: #ffffff;
+  background-color: var(--background-color);
   border-color: var(--primary-color);
-  box-shadow: 0 0 0 3px rgba(107, 45, 143, 0.08);
+  box-shadow: 0 0 0 3px var(--accent-purple-lightest);
 }
 
 .popup textarea {
   width: 100%;
-  min-height: 70px;
+  min-height: 90px;
   resize: vertical;
-  padding: 10px 14px;
+  padding: 12px 14px;
   font-size: 0.9rem;
-  font-family: 'Inter', sans-serif;
-  border: 1px solid #d8d8d8;
-  border-radius: 10px;
-  background-color: #fafafa;
-  margin-bottom: 12px;
+  font-family: 'Montserrat', sans-serif;
+  border: 2px solid var(--border-color);
+  border-radius: var(--radius-md);
+  background-color: var(--input-background);
+  margin-bottom: var(--space-md);
+  color: var(--text-primary);
+  line-height: 1.5;
+  transition: all var(--transition-base);
+}
+
+.popup textarea::placeholder {
+  color: var(--text-tertiary);
 }
 
 .popup textarea:focus {
   outline: none;
-  background-color: #ffffff;
+  background-color: var(--background-color);
   border-color: var(--primary-color);
-  box-shadow: 0 0 0 3px rgba(107, 45, 143, 0.08);
+  box-shadow: 0 0 0 3px var(--accent-purple-lightest);
 }
 
 .popup-buttons {
-  padding: 14px 24px 20px;
-  border-top: 1px solid #f0f0f0;
+  padding: var(--space-md) var(--space-lg) var(--space-lg);
+  border-top: 1px solid var(--border-color);
   display: flex;
-  gap: 10px;
+  gap: var(--space-sm);
   justify-content: flex-end;
   flex-shrink: 0;
+  background: var(--header-background);
 }
 
 .popup-buttons button {
   font-size: 0.875rem;
-  padding: 11px 20px;
-  border: none;
-  border-radius: 10px;
+  padding: 11px 24px;
+  border: 2px solid transparent;
+  border-radius: var(--radius-md);
   cursor: pointer;
   font-weight: 600;
-  transition: all 0.2s;
+  transition: all var(--transition-base);
   white-space: nowrap;
+  font-family: 'Montserrat', sans-serif;
+}
+
+/* Primary button (Save) */
+.popup-buttons button:first-child,
+#saveCommentBtn,
+#saveDrawerBtn,
+#doneTagsBtn {
+  background: var(--primary-gradient);
+  color: white;
+  box-shadow: var(--shadow-sm);
+}
+
+.popup-buttons button:first-child:hover,
+#saveCommentBtn:hover,
+#saveDrawerBtn:hover,
+#doneTagsBtn:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.popup-buttons button:first-child:active,
+#saveCommentBtn:active,
+#saveDrawerBtn:active,
+#doneTagsBtn:active {
+  transform: translateY(0);
+  box-shadow: var(--shadow-sm);
+}
+
+/* Secondary button (Cancel) */
+.popup-buttons button:last-child,
+#cancelCommentBtn,
+#cancelDrawerBtn {
+  background: var(--background-color);
+  color: var(--text-primary);
+  border-color: var(--border-color-strong);
+}
+
+.popup-buttons button:last-child:hover,
+#cancelCommentBtn:hover,
+#cancelDrawerBtn:hover {
+  background: var(--card-background);
+  border-color: var(--primary-color);
+  transform: translateY(-1px);
 }
 
 .share-options {
@@ -1547,57 +1609,102 @@ header {
 }
 
 .modal-tags-section {
-  margin-top: 8px;
+  margin-top: var(--space-sm);
+}
+
+.modal-tags-section label {
+  margin-bottom: var(--space-sm);
 }
 
 .modal-tags-container {
   display: flex;
   flex-wrap: wrap;
-  gap: 6px;
-  padding: 10px;
-  border: 1px solid #d8d8d8;
-  border-radius: 10px;
-  background: #fafafa;
-  min-height: 44px;
-  max-height: 100px;
+  gap: var(--space-sm);
+  padding: 12px;
+  border: 2px solid var(--border-color);
+  border-radius: var(--radius-md);
+  background: var(--card-background);
+  min-height: 52px;
+  max-height: 120px;
   overflow-y: auto;
+  transition: border-color var(--transition-base);
+}
+
+.modal-tags-container:focus-within {
+  border-color: var(--primary-color);
+  background: var(--background-color);
 }
 
 .modal-tag {
   display: inline-flex;
   align-items: center;
-  gap: 5px;
-  padding: 6px 12px;
-  border-radius: 7px;
+  gap: 6px;
+  padding: 7px 13px;
+  border-radius: var(--radius-sm);
   font-size: 0.75rem;
   font-weight: 500;
   border: 2px solid;
   cursor: pointer;
-  transition: all 0.2s;
-  opacity: 0.5;
+  transition: all var(--transition-base);
+  opacity: 0.45;
+  user-select: none;
 }
 
 .modal-tag:hover {
-  opacity: 0.75;
+  opacity: 0.7;
   transform: translateY(-1px);
+  box-shadow: var(--shadow-sm);
 }
 
 .modal-tag.selected {
   opacity: 1;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-  transform: scale(1.02);
+  box-shadow: var(--shadow-md);
+  transform: scale(1.03);
   font-weight: 600;
 }
 
 .modal-tag.selected::before {
   content: '✓';
   font-weight: 700;
+  font-size: 0.875rem;
 }
 
 .no-tags-message {
   font-size: 0.8125rem;
-  color: #a0a0a0;
+  color: var(--text-tertiary);
   font-weight: 500;
+  font-style: italic;
+  text-align: center;
+  padding: var(--space-sm);
+}
+
+/* Add card modal specific enhancements */
+.add-comment-modal .popup-header {
+  background: linear-gradient(135deg, var(--header-background) 0%, var(--background-color) 100%);
+}
+
+.add-comment-modal input[type="text"]:hover,
+.add-comment-modal input[type="url"]:hover,
+.add-comment-modal textarea:hover {
+  border-color: var(--border-color-strong);
+}
+
+/* Smooth scrollbar for modal tags */
+.modal-tags-container::-webkit-scrollbar {
+  width: 6px;
+}
+
+.modal-tags-container::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.modal-tags-container::-webkit-scrollbar-thumb {
+  background: var(--border-color-strong);
+  border-radius: var(--radius-full);
+}
+
+.modal-tags-container::-webkit-scrollbar-thumb:hover {
+  background: var(--primary-color);
 }
 
 .about-modal {
@@ -2385,9 +2492,84 @@ header {
     </div>
   </div>
 
+  <!-- Privacy Policy Page -->
+  <div id="privacy-container" style="display: none;">
+    <div style="max-width: 800px; margin: 0 auto; padding: 40px 20px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif; color: #333; line-height: 1.6;">
+      <div style="margin-bottom: 30px;">
+        <button onclick="history.back()" style="background: none; border: 1px solid var(--border-color); color: var(--primary-color); padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 14px; display: inline-flex; align-items: center; gap: 8px;">
+          ← Back
+        </button>
+      </div>
+
+      <h1 style="color: var(--primary-color); margin-bottom: 20px;">Privacy Policy</h1>
+      <p style="color: #666; margin-bottom: 30px;"><strong>Last Updated:</strong> November 2024</p>
+
+      <h2 style="color: #444; margin-top: 30px; margin-bottom: 15px;">Overview</h2>
+      <p>Drawers is a browser extension designed to help you organize bookmarks, links, and resources. We are committed to protecting your privacy and being transparent about our practices.</p>
+
+      <h2 style="color: #444; margin-top: 30px; margin-bottom: 15px;">Data Collection & Storage</h2>
+      <h3 style="color: #555; margin-top: 20px; margin-bottom: 10px;">What We Store</h3>
+      <ul style="margin-left: 20px;">
+        <li><strong>Your Drawers:</strong> All drawer names, card titles, links, and descriptions you create are stored locally in your browser using Chrome's Storage API.</li>
+        <li><strong>Settings:</strong> Your preferences, including onboarding completion status and selected use cases.</li>
+        <li><strong>Engagement Timestamps:</strong> Local timestamps of when you use the extension (used only to determine when to show donation popup).</li>
+      </ul>
+
+      <h3 style="color: #555; margin-top: 20px; margin-bottom: 10px;">Where Your Data Lives</h3>
+      <ul style="margin-left: 20px;">
+        <li><strong>Local Storage:</strong> All data is stored in your browser's local storage.</li>
+        <li><strong>Chrome Sync (Optional):</strong> If you're signed into Chrome with sync enabled, your drawers may sync across your devices via Chrome's built-in sync service. This is controlled by your Chrome settings, not by us.</li>
+        <li><strong>No External Servers:</strong> We do not store your data on any external servers or databases.</li>
+      </ul>
+
+      <h2 style="color: #444; margin-top: 30px; margin-bottom: 15px;">External Resources</h2>
+      <p>This extension loads the following external resources:</p>
+      <ul style="margin-left: 20px;">
+        <li><strong>Google Fonts:</strong> We load the Montserrat font from Google Fonts (fonts.googleapis.com) for visual styling. This request may send your IP address to Google.</li>
+        <li><strong>Donation Images:</strong> When the donation popup is displayed, a QR code image is loaded from Imgur (i.imgur.com). This request may send your IP address to Imgur.</li>
+      </ul>
+      <p>These external resources are used solely for functionality and visual presentation. No personal data or browsing history is sent to these services.</p>
+
+      <h2 style="color: #444; margin-top: 30px; margin-bottom: 15px;">Permissions Explained</h2>
+      <p>The extension requests the following permissions:</p>
+      <ul style="margin-left: 20px;">
+        <li><strong>Storage:</strong> To save your drawers and settings locally in your browser.</li>
+        <li><strong>Tabs:</strong> To access the current tab's URL and title when you add a bookmark, and to enable the "Gather All Tabs" feature.</li>
+        <li><strong>Scripting:</strong> To extract metadata (page title and description) from web pages when you add them to your drawers.</li>
+        <li><strong>Side Panel:</strong> To display the extension interface in Chrome's side panel.</li>
+        <li><strong>Host Permissions (http://*/* and https://*/*):</strong> Required to extract metadata from any website you choose to bookmark.</li>
+      </ul>
+
+      <h2 style="color: #444; margin-top: 30px; margin-bottom: 15px;">What We DON'T Do</h2>
+      <ul style="margin-left: 20px;">
+        <li>❌ We do not collect, store, or transmit your browsing history</li>
+        <li>❌ We do not use analytics or tracking services</li>
+        <li>❌ We do not sell or share your data with third parties</li>
+        <li>❌ We do not access your data unless you explicitly add it to a drawer</li>
+        <li>❌ We do not inject ads or modify web pages</li>
+      </ul>
+
+      <h2 style="color: #444; margin-top: 30px; margin-bottom: 15px;">Your Control</h2>
+      <p>You have complete control over your data:</p>
+      <ul style="margin-left: 20px;">
+        <li><strong>Export:</strong> You can export all your drawers at any time using the download feature.</li>
+        <li><strong>Delete:</strong> You can delete individual cards, drawers, or reset all data from within the extension.</li>
+        <li><strong>Uninstall:</strong> Uninstalling the extension will remove all locally stored data.</li>
+      </ul>
+
+      <h2 style="color: #444; margin-top: 30px; margin-bottom: 15px;">Updates to This Policy</h2>
+      <p>We may update this privacy policy from time to time. Any changes will be reflected on this page with an updated "Last Updated" date.</p>
+
+      <h2 style="color: #444; margin-top: 30px; margin-bottom: 15px;">Contact</h2>
+      <p>If you have questions about this privacy policy or how your data is handled, please open an issue on our <a href="https://github.com/anthropics/claude-code/issues" style="color: var(--primary-color);">GitHub repository</a> or contact the developer.</p>
+    </div>
+  </div>
+
   <footer class="footer">
     <div class="footer-copyright">
       © <span id="copyright-year"></span> Alexander Landfair. All rights reserved.
+      <span style="margin: 0 10px;">•</span>
+      <a href="#privacy-policy" onclick="openPrivacyPage(); return false;" style="color: var(--primary-color); text-decoration: none;">Privacy Policy</a>
     </div>
   </footer>
 
@@ -2546,6 +2728,7 @@ header {
     function goToHome(updateHistory = true) {
       document.getElementById('comment-container').style.display = 'none';
       document.getElementById('archive-container').style.display = 'none';
+      document.getElementById('privacy-container').style.display = 'none';
       document.getElementById('landing-container').style.display = 'block';
       document.querySelector('.container').style.display = 'block';
       currentCommentBankIndex = -1;
@@ -2565,6 +2748,7 @@ header {
 
       document.getElementById('landing-container').style.display = 'none';
       document.getElementById('archive-container').style.display = 'none';
+      document.getElementById('privacy-container').style.display = 'none';
       document.getElementById('comment-container').style.display = 'block';
       document.querySelector('.container').style.display = 'none';
 
@@ -2612,6 +2796,7 @@ header {
     function openArchiveDrawer(updateHistory = true) {
       document.getElementById('landing-container').style.display = 'none';
       document.getElementById('comment-container').style.display = 'none';
+      document.getElementById('privacy-container').style.display = 'none';
       document.getElementById('archive-container').style.display = 'block';
       document.querySelector('.container').style.display = 'none';
 
@@ -2623,6 +2808,22 @@ header {
       // Update URL
       if (updateHistory) {
         history.pushState({ view: 'archive' }, '', '#archive');
+      }
+    }
+
+    function openPrivacyPage(updateHistory = true) {
+      document.getElementById('landing-container').style.display = 'none';
+      document.getElementById('comment-container').style.display = 'none';
+      document.getElementById('archive-container').style.display = 'none';
+      document.getElementById('privacy-container').style.display = 'block';
+      document.querySelector('.container').style.display = 'none';
+
+      // Update header title
+      document.getElementById('main-title').innerHTML = 'Drawers <span style="font-weight: 400;">→ Privacy Policy</span>';
+
+      // Update URL
+      if (updateHistory) {
+        history.pushState({ view: 'privacy' }, '', '#privacy-policy');
       }
     }
 
@@ -3722,7 +3923,7 @@ header {
 
     document.getElementById('reportBugBtn').onclick = () => {
       document.getElementById('optionsDropdownMenu').classList.remove('show');
-      window.open('https://forms.gle/8dLWgUPiDJGExTQ96', '_blank');
+      window.open('https://docs.google.com/forms/d/e/1FAIpQLSfi-GeTcZVTl3orKz6P5e6DtrCL67fpu43OXXslg2rE19iUsA/viewform', '_blank');
     };
 
     document.getElementById('getChromeExtensionBtn').onclick = () => {
@@ -3915,6 +4116,9 @@ header {
       } else if (hash === 'archive') {
         // Open archive
         openArchiveDrawer(false);
+      } else if (hash === 'privacy' || hash === 'privacy-policy') {
+        // Open privacy policy
+        openPrivacyPage(false);
       } else {
         // Find drawer by slug
         const index = commentBanks.findIndex(bank => slugify(bank.assignmentName) === hash);
@@ -3931,6 +4135,8 @@ header {
       const hash = window.location.hash.substring(1);
       if (hash === 'archive') {
         openArchiveDrawer(false);
+      } else if (hash === 'privacy' || hash === 'privacy-policy') {
+        openPrivacyPage(false);
       } else if (hash) {
         const index = commentBanks.findIndex(bank => slugify(bank.assignmentName) === hash);
         if (index !== -1) {
